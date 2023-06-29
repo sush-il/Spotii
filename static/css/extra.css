@@ -1,0 +1,23 @@
+.playcard{
+    background: none;
+    flex-direction: column;
+    overflow: hidden;
+    height:15rem;
+    text-align: center;
+}
+
+.time-selection {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    padding-top: 1.5rem;
+}
+
+.btn{
+    border: none;
+}
+
+.btn:hover{
+    color:white;
+    text-decoration: underline;
+}

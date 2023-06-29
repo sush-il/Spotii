@@ -1,0 +1,32 @@
+{% extends 'main/base.html' %}
+
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+{% endblock %}
+
+
+
+{% block content %}
+    <div class="container" id="details-main">
+        <div class="row">
+            <div class="four columns">
+                <img class="details-cover" src="{{context.cover}}" />
+                <h2>{{context.name}}</h2>
+                <p>{{context.total_tracks}} Tracks</p>
+            </div>
+
+            <div class="eight columns">
+                <form action="/details" method="post">
+                    {% for song in context.songs %}
+                        <div class="container song-list">
+                            <img class="cover" src="{{song.cover.0.url}}" />
+                            <button class="name-link" name="details" value="tracks,{{song}}"> {{song.name}} </button>
+                        </div>
+
+                    {% endfor %}
+                </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

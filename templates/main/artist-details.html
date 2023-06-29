@@ -1,0 +1,15 @@
+{% extends 'main/base.html' %}
+
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+{% endblock %}
+
+
+{% block content %}
+    <div class="container artist-details" id="details-main">
+        <img class="details-cover" src="{{context.cover}}" />
+        <h2><b>{{context.name}}</b></h2>
+        <p><b> {{context.genres}} </b></p>
+        <p> Popularity: {{context.popularity}}%</p>
+    </div>
+{% endblock %}

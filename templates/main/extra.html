@@ -1,0 +1,30 @@
+{% extends 'main/base.html' %}
+
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/extra.css') }}" />
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row time-selection">
+            <form action="" method="post">
+                <button class="btn" type="submit" value="{{context.identifier}},short_term" name="extras">1 Month</button>
+                <button class="btn" type="submit" value="{{context.identifier}},medium_term" name="extras">6 Months</button>
+                <button class="btn" type="submit" value="{{context.identifier}},long_term" name="extras">All Time</button>
+            </form>
+            <br>
+        </div>
+
+        <div class="row">
+            {% for item in context.obj %}
+                <div class="three columns playcard">
+                    <form action="/details" method="post">
+                        <img class="cover" src="{{item.cover}}" />
+                        <button class="name-link" name="details" value="{{context.identifier}},{{item}}"> {{item.name}} </button>
+                </form>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

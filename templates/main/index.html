@@ -1,0 +1,81 @@
+<!--Extend the navbar and other info fromt base file-->
+{% extends "main/base.html" %}
+
+{% block css %}
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+{% endblock %}
+
+{% block content %}
+    <div class="container main">
+        <!--Generae columns inside row for each playlist | Max six on this page--> 
+        <div class="row title-row">
+            <div class="ten columns">
+                <h1> Your Playlists </h1>
+            </div>
+            <div class="two columns">
+                <form action="/extra" method="post">
+                    <button class="more-btn" name="extras" value="playlists,none"> View More </button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="row playlists">
+            <form action="\details" method="post" class="form-row">
+                {% for items in context.playlist|slice(6) %}
+                    <div class="four columns playcard">
+                            <!--using the syntax .0 as list returned with one dictionary in it-->
+                            <a href="#" type="submit"> <img class= "cover" src="{{items.0.cover}}"/> </a>
+                            <button class="name-link" name="details" value="playlists,{{items.0}}"> {{items.0.name}} </button>
+                    </div>
+                {% endfor %}
+            </form>
+
+        </div> 
+        
+        <!--Generae columns inside row for users top artists | Max six on this page-->
+        <div class="row title-row">
+            <div class="ten columns">
+                <h1> Your Top Artitsts </h1>
+            </div>
+            <div class="two columns">
+                <form action="/extra" method="post">
+                    <button class="more-btn" name="extras" value="artists,medium_term"> View More </button>
+                </form> 
+            </div>
+        </div>
+
+        <div class="row top-artists">
+            <form action="\details" method="post" class="form-row">
+                {% for artist in context.artists|slice(6) %} <!--|slice:"6"-->
+                    <div class="four columns playcard" >
+                        <a href="#"> <img class="cover" src="{{artist.0.cover}}"/> </a><!--src = artist.0.cover-->
+                        <button class="name-link" name="details" value="artists,{{artist.0}}"> {{artist.0.name}}  </button>
+                    </div>
+                {% endfor %}
+            </form>
+        </div>
+
+        <!--Generae columns inside row for users top tracks | Max six on this page-->
+        <div class="row title-row">
+            <div class="ten columns">
+                <h1> Your Top Tracks </h1>
+            </div>
+            <div class="two columns">
+                <form action="/extra" method="post">
+                    <button class="more-btn" name="extras" value="tracks,medium_term"> View More </button>
+                </form> 
+            </div>
+        </div>
+
+        <div class="row to-tracks">
+            <form action="\details" method="post" class="form-row">
+                {% for track in context.tracks|slice(6) %}
+                    <div class="four columns playcard">
+                        <a href="#"> <img class="cover" src="{{track.0.cover}}"/> </a>
+                        <button class="name-link" name="details" value="tracks,{{track.0}}"> {{track.0.name}} </button>
+                    </div>
+                {% endfor %}
+            </form>
+        </div>
+    </div>
+{% endblock %}
