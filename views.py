@@ -2,6 +2,7 @@ from ast import literal_eval #convert string to dictionary
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from flask import request, Blueprint, render_template, redirect, url_for
+import csv
 
 views = Blueprint(__name__,"views")
 
@@ -23,6 +24,8 @@ def home():
                'artists': get_top_artists(sp),
                'tracks': get_top_tracks(sp)
                }
+    
+    #cdata(sp)
 
     return render_template('main/index.html',context = context)
 
@@ -95,7 +98,6 @@ def get_playlists(sp):
 # get the users top artists
 def get_top_artists(sp, time_range = 'medium_term'):
     top_artists = sp.current_user_top_artists(limit=30,time_range = time_range)['items']
-    print(top_artists[0])
     artist_info = []
 
     for artist in top_artists:
@@ -151,3 +153,20 @@ def get_user_playlists():
                                                    scope="playlist-read-private, playlist-read-collaborative"))
  
     return render_template('main/index.html')
+
+
+#----------------------------------------------------
+@views.route("/chart")
+def cdata():
+    sp_oauth = authorise_app()
+    code = request.args.get('code')   
+    token_info = sp_oauth.get_access_token(code)
+    sp = spotipy.Spotify(auth=token_info['access_token'])
+
+    extracted = []
+    feat = sp.audio_features(tracks=['3KkXRkHbMCARz0aVfEt68P'])
+    for item in feat:
+        extracted.append({key: item[key] for key in item.keys()&{'speechiness', 'energy', 'valence', 'liveness', 'instrumentalness', 'acousticness', 'danceability'}})
+    print(extracted)
+    return render_template("main/chart.html",context=extracted[0])
+        
