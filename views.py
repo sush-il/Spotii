@@ -2,6 +2,7 @@ from ast import literal_eval #convert string to dictionary
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from flask import request, Blueprint, render_template, redirect, url_for
+import song_classify as ml
 import csv
 
 views = Blueprint(__name__,"views")
@@ -9,8 +10,6 @@ views = Blueprint(__name__,"views")
 client_id = '83cc05d765584a0a8806c0911f7343b7'
 client_secret = '8b2c0ea3808347f28d85044611d1fe29'
 redirect_uri = 'http://127.0.0.1:8000'
-
-playlist_endpoint = "https://api.spotify.com/v1/playlists/"
 
 # get data for the home page
 @views.route("/")
@@ -24,8 +23,6 @@ def home():
                'artists': get_top_artists(sp),
                'tracks': get_top_tracks(sp)
                }
-    
-    #cdata(sp)
 
     return render_template('main/index.html',context = context)
 
@@ -131,42 +128,43 @@ def get_top_tracks(sp, time_range='medium_term'):
         track_info.append(info)
 
     return track_info
-    
+
 def authenticate():
     sp_oauth = authorise_app()
     auth_url = sp_oauth.get_authorize_url()
     return redirect(url_for(auth_url))
 
 def authorise_app():
+    scope = "user-library-read user-top-read user-read-currently-playing"
     return SpotifyOAuth(
             client_id=client_id,
             client_secret=client_secret,
             redirect_uri=redirect_uri,
-            scope="user-library-read, user-top-read"
+            scope=scope
         )
-
-def get_user_playlists():
-    sp = spotipy.Spotify(auth_manager=SpotifyOAuth(client_id=client_id,
-                                                   response_type = 'code',
-                                                   client_secret=client_secret,
-                                                   redirect_uri=redirect_uri,
-                                                   scope="playlist-read-private, playlist-read-collaborative"))
- 
-    return render_template('main/index.html')
-
-
+# user-read-currently-playing
 #----------------------------------------------------
-@views.route("/chart")
-def cdata():
-    sp_oauth = authorise_app()
-    code = request.args.get('code')   
-    token_info = sp_oauth.get_access_token(code)
-    sp = spotipy.Spotify(auth=token_info['access_token'])
 
-    extracted = []
-    feat = sp.audio_features(tracks=['3KkXRkHbMCARz0aVfEt68P'])
-    for item in feat:
-        extracted.append({key: item[key] for key in item.keys()&{'speechiness', 'energy', 'valence', 'liveness', 'instrumentalness', 'acousticness', 'danceability'}})
-    print(extracted)
-    return render_template("main/chart.html",context=extracted[0])
-        
+@views.route("/mood")
+def mood():
+    sp_oauth = authorise_app()
+    code = request.args.get('code')
+    token_info = sp_oauth.get_access_token(code)
+    access_token = token_info['access_token']
+
+    # Create a new Spotipy client
+    sp = spotipy.Spotify(auth=access_token)
+
+    # Get the current playing track
+    current_track = sp.current_user_playing_track()['item']
+    current_track['features'] =  sp.audio_features(tracks=current_track['id'])
+
+    class_value = ml.get_mood(current_track['features'])
+    
+    print(f"{current_track['name']}: {class_value}")
+
+
+    return render_template("main/mood.html",context=current_track)
+
+##############################################################################################
+       

@@ -2,14 +2,16 @@
 
 {% block css %}
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
+    
 {% endblock %}
 
 {% block content %}
-    <div class="container artist-details" id="details-main">
-        <img class="details-cover" src="{{context.cover}}" />
-        <h2>{{context.name}}</h2>
-        <p> {{context.artists.0.name}} </p>
-        <canvas id="myChart" class="container"></canvas> <!--Canvas for charts-->
+    <div class="container artist-details">
+        <h4> The song you're currently playing: </h1>
+            <img class="details-cover" src="{{context.album.images.0.url}}" />
+            <h3>{{context.name}}</h3>
+            <p>{{context.artists.0.name}}</p>
+            <canvas id="myChart" class="container"></canvas> <!--Canvas for charts-->
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -20,7 +22,7 @@
             console.log(item);
         }
 
-        var data = {{context.genres.0|tojson}}; //get data and turn to json
+        var data = {{context.features.0|tojson}}; //get data and turn to json
         console.log(data);
         
         new Chart(ctx, {
@@ -53,4 +55,6 @@
     </script>
 
 
+
 {% endblock %}
+

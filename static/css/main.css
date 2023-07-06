@@ -97,7 +97,12 @@ body{
     width: 30rem;
     border-radius: 3rem;
     padding-top: 5%;
+    /* align-items: center; */
+    /* float: none; */
+    justify-content: center;
 }
+
+img.details-cover {}
 
 .song-list{
     display:flex;
