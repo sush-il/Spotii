@@ -2,58 +2,61 @@
 
 {% block css %}
     <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}" />
-    
 {% endblock %}
 
 {% block content %}
     <div class="container artist-details">
-        <h4> The song you're currently playing: </h1>
+        <h4> The song you're listening to is: </h4>
+        <h1 id="cool-text">{{context.mood}}</h1>
+        <p>{{context.message}}</p>
+
+        {% if context.mood != None %}
             <img class="details-cover" src="{{context.album.images.0.url}}" />
             <h3>{{context.name}}</h3>
             <p>{{context.artists.0.name}}</p>
             <canvas id="myChart" class="container"></canvas> <!--Canvas for charts-->
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        const ctx = document.getElementById('myChart');
-        
-        function logit(item){
-            console.log(item);
-        }
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const ctx = document.getElementById('myChart');
+            
+            function logit(item){
+                console.log(item);
+            }
 
-        var data = {{context.features.0|tojson}}; //get data and turn to json
-        console.log(data);
-        
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['acousticness','danceability','energy','instrumentalness','liveness','speechiness','valence'],
-                datasets: [{
-                    label:"Score",
-                    data: [data.acousticness,data.danceability,data.energy,
-                            data.instrumentalness,data.liveness,
-                            data.speechiness,data.valence],
-                    backgroundColor: ['rgba(0,255,212,0.3)','rgba(255,0,114,0.3)','rgba(221,0,255,0.3)'],
-                    borderColor:['rgb(0,255,212)','rgb(255,0,114)','rgb(221,0,255)'],
-                    borderWidth: 2,
-                    
-                }]
-            },
-            options: {
-                indexAxis: 'y', //horizontal bar
-                scales: { y: {beginAtZero: true} },
-                legend:{ display:false },
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Audio Features',
+            var data = {{context.features.0|tojson}}; //get data and turn to json
+            console.log(data);
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['acousticness','danceability','energy','instrumentalness','liveness','speechiness','valence'],
+                    datasets: [{
+                        label:"Score",
+                        data: [data.acousticness,data.danceability,data.energy,
+                                data.instrumentalness,data.liveness,
+                                data.speechiness,data.valence],
+                        backgroundColor: ['rgba(0,255,212,0.3)','rgba(255,0,114,0.3)','rgba(221,0,255,0.3)'],
+                        borderColor:['rgb(0,255,212)','rgb(255,0,114)','rgb(221,0,255)'],
+                        borderWidth: 2,
+                        
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', //horizontal bar
+                    scales: { y: {beginAtZero: true} },
+                    legend:{ display:false },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Audio Features',
+                        }
                     }
                 }
-            }
-        });
-    </script>
-
+            });
+        </script>
+    {% endif %}
 
 
 {% endblock %}

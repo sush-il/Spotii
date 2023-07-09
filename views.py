@@ -3,13 +3,15 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from flask import request, Blueprint, render_template, redirect, url_for
 import song_classify as ml
-import csv
+from dotenv import load_dotenv
+import os
+
 
 views = Blueprint(__name__,"views")
-
-client_id = '83cc05d765584a0a8806c0911f7343b7'
-client_secret = '8b2c0ea3808347f28d85044611d1fe29'
-redirect_uri = 'http://127.0.0.1:8000'
+load_dotenv()
+client_id = os.getenv('CLIENT_ID')
+client_secret = os.getenv('CLIENT_SECRET')
+redirect_uri = os.getenv('REDIRECT_URI')
 
 # get data for the home page
 @views.route("/")
@@ -156,15 +158,51 @@ def mood():
     sp = spotipy.Spotify(auth=access_token)
 
     # Get the current playing track
+    current_track = sp.current_user_playing_track()
+
+    #check if a song is currently playing
+    if current_track == None:
+        context = {'mood':None,'message':"Make sure that you're playing a song on spotify for this to work."}
+        return render_template("main/mood.html",context=context)
+    
     current_track = sp.current_user_playing_track()['item']
     current_track['features'] =  sp.audio_features(tracks=current_track['id'])
 
-    class_value = ml.get_mood(current_track['features'])
-    
-    print(f"{current_track['name']}: {class_value}")
+    #get the classification for the song
+    mood_value = ml.get_mood(current_track['features'])
 
+    if mood_value == 1:
+        mood = "Happy"
+        message = "I'm glad you're feeling like this."
+    elif mood_value == 2:
+        mood = "Sad"
+        message = "It's OK! You don't have to cry alone."
+    elif mood_value == 3:
+        mood = "Energetic"
+        message = "Might as well get up and hit the floor."
+    elif mood_value == 4:
+        mood = "Calm"
+        message = "This is the vibe!"
+    else:
+        mood = ""
+        message = "Make sure that you're playing a song on spotify for this to work."
+    
+    #add the classification and message to the track info
+    current_track['mood'] = mood
+    current_track['message'] = message
 
     return render_template("main/mood.html",context=current_track)
+
+    """if mood_value == 1:
+        mood = "HAPPY"
+    elif mood_value == 2:
+        mood = "SAD"
+    elif mood_value == 3:
+        mood = "ENERGETIC"    
+    elif mood_value == 4:
+        mood = "CALM"
+    else:
+        mood = "NONE"""
 
 ##############################################################################################
        

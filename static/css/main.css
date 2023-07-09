@@ -97,12 +97,8 @@ body{
     width: 30rem;
     border-radius: 3rem;
     padding-top: 5%;
-    /* align-items: center; */
-    /* float: none; */
     justify-content: center;
 }
-
-img.details-cover {}
 
 .song-list{
     display:flex;
@@ -117,3 +113,17 @@ img.details-cover {}
     align-items: center;
     justify-content: center;
 }
+
+/* Cool text */
+#cool-text {
+  background-image: url(https://media.giphy.com/media/26BROrSHlmyzzHf3i/giphy.gif);
+  background-size: cover;
+  color: transparent;
+  -moz-background-clip: text;
+  -webkit-background-clip: text;
+  text-transform: uppercase;
+  font-size: 5em;
+  font-weight:900;
+  text-align: center;
+}
+/* styling my button */
