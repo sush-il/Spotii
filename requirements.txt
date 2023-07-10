@@ -21,3 +21,4 @@ spotipy
 threadpoolctl
 urllib3
 Werkzeug
+gunicorn
