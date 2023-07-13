@@ -14,12 +14,10 @@ client_secret = os.getenv('CLIENT_SECRET')
 redirect_uri = os.getenv('REDIRECT_URI')
 
 # get data for the home page
-@views.route("/")
+@views.route("/main")
 def home():
-    sp_oauth = authorise_app()
-    code = request.args.get('code')   
-    token_info = sp_oauth.get_access_token(code)
-    sp = spotipy.Spotify(auth=token_info['access_token'])
+    code = request.args.get('code')  
+    sp = authorise_app(code)
 
     context = {'playlist': get_playlists(sp),
                'artists': get_top_artists(sp),
@@ -31,10 +29,8 @@ def home():
 # return tracks or playlist for selected time range
 @views.route("/extra", methods=['POST'])
 def get_extras():
-    sp_oauth = authorise_app()
-    code = request.args.get('code')   
-    token_info = sp_oauth.get_access_token(code)
-    sp = spotipy.Spotify(auth=token_info['access_token'])
+    code = request.args.get('code')
+    sp = authorise_app(code)
     
     info = request.form.get('extras').split(',')
 
@@ -67,6 +63,48 @@ def get_details():
         
     return render_template('main/error.html')
 
+@views.route("/mood")
+def mood():
+    # Create a new Spotipy client
+    code = request.args.get('code')
+    sp = authorise_app(code)
+
+    # Get the current playing track
+    current_track = sp.current_user_playing_track()
+
+    #check if a song is currently playing
+    if current_track == None:
+        context = {'mood':None,'message':"Make sure that you're playing a song on spotify for this to work."}
+        return render_template("main/mood.html",context=context)
+    
+    current_track = sp.current_user_playing_track()['item']
+    current_track['features'] =  sp.audio_features(tracks=current_track['id'])
+
+    #get the classification for the song
+    mood_value = ml.get_mood(current_track['features'])
+
+    if mood_value == 1:
+        mood = "Happy"
+        message = "I'm glad you're feeling like this."
+    elif mood_value == 2:
+        mood = "Sad"
+        message = "It's OK! You don't have to cry alone."
+    elif mood_value == 3:
+        mood = "Energetic"
+        message = "Might as well get up and hit the floor."
+    elif mood_value == 4:
+        mood = "Calm"
+        message = "This is the vibe!"
+    else:
+        mood = ""
+        message = "Make sure that you're playing a song on spotify for this to work."
+    
+    #add the classification and message to the track info
+    current_track['mood'] = mood
+    current_track['message'] = message
+
+    return render_template("main/mood.html",context=current_track)
+    
 # get all user playlists and details of all tracks in the playlist
 def get_playlists(sp):
     all_playlists = sp.current_user_playlists(limit=30,offset=0)['items']
@@ -92,7 +130,6 @@ def get_playlists(sp):
                 }
         playlist_info.append(info)
     return playlist_info
-
 
 # get the users top artists
 def get_top_artists(sp, time_range = 'medium_term'):
@@ -131,78 +168,29 @@ def get_top_tracks(sp, time_range='medium_term'):
 
     return track_info
 
+#authenticate the user
+@views.route("/")
 def authenticate():
-    sp_oauth = authorise_app()
+    sp_oauth = SpotifyOAuth(
+            client_id=client_id,
+            client_secret=client_secret,
+            redirect_uri=redirect_uri,
+            scope="user-library-read user-top-read user-read-currently-playing"
+        )
     auth_url = sp_oauth.get_authorize_url()
-    return redirect(url_for(auth_url))
-
-def authorise_app():
+    return redirect(auth_url)
+ 
+#get the authorisation access token 
+def authorise_app(code):
     scope = "user-library-read user-top-read user-read-currently-playing"
-    return SpotifyOAuth(
+    sp_oauth = SpotifyOAuth(
             client_id=client_id,
             client_secret=client_secret,
             redirect_uri=redirect_uri,
             scope=scope
         )
-# user-read-currently-playing
-#----------------------------------------------------
 
-@views.route("/mood")
-def mood():
-    sp_oauth = authorise_app()
-    code = request.args.get('code')
     token_info = sp_oauth.get_access_token(code)
-    access_token = token_info['access_token']
+    sp = spotipy.Spotify(auth=token_info['access_token'])
 
-    # Create a new Spotipy client
-    sp = spotipy.Spotify(auth=access_token)
-
-    # Get the current playing track
-    current_track = sp.current_user_playing_track()
-
-    #check if a song is currently playing
-    if current_track == None:
-        context = {'mood':None,'message':"Make sure that you're playing a song on spotify for this to work."}
-        return render_template("main/mood.html",context=context)
-    
-    current_track = sp.current_user_playing_track()['item']
-    current_track['features'] =  sp.audio_features(tracks=current_track['id'])
-
-    #get the classification for the song
-    mood_value = ml.get_mood(current_track['features'])
-
-    if mood_value == 1:
-        mood = "Happy"
-        message = "I'm glad you're feeling like this."
-    elif mood_value == 2:
-        mood = "Sad"
-        message = "It's OK! You don't have to cry alone."
-    elif mood_value == 3:
-        mood = "Energetic"
-        message = "Might as well get up and hit the floor."
-    elif mood_value == 4:
-        mood = "Calm"
-        message = "This is the vibe!"
-    else:
-        mood = ""
-        message = "Make sure that you're playing a song on spotify for this to work."
-    
-    #add the classification and message to the track info
-    current_track['mood'] = mood
-    current_track['message'] = message
-
-    return render_template("main/mood.html",context=current_track)
-
-    """if mood_value == 1:
-        mood = "HAPPY"
-    elif mood_value == 2:
-        mood = "SAD"
-    elif mood_value == 3:
-        mood = "ENERGETIC"    
-    elif mood_value == 4:
-        mood = "CALM"
-    else:
-        mood = "NONE"""
-
-##############################################################################################
-       
+    return sp
