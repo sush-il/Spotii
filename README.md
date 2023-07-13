@@ -44,15 +44,15 @@ If you would like a local installation of the project follow these steps:
 **HTML/CSS**: The front-end of the application is built using HTML and styled with CSS for an interactive and visually appealing user interface.
 **Chart JS**: A JavaScript library used for data visualization. Chart.js is employed to create interactive and visually appealing graphs representing audio features.
 
-##Contributing
+## Contributing
 Contributions to the Spotify Music Analyzer project are welcome. If you find any bugs, have suggestions for improvements, or would like to add new features, please submit an issue or create a pull request in the repository.
 
 When contributing, please follow the existing code style, add tests for new functionality, and ensure that your changes do not break existing features.
 
-License
+## License
 The Spotify Music Analyzer is open-source and released under the MIT License. You are free to modify and distribute the application as per the terms of the license.
 
-Acknowledgements
+## Acknowledgements
 The Spotify Music Analyzer was developed by Sushil Bhandari for personal learning purposes.
 The application utilizes the Spotify API, which provides the necessary data for playlist, artist, and track information.
 The mood classification algorithm is based on the Random Forest machine learning algorithm and uses pre-collected data from labeled Spotify playlists.
