@@ -10,7 +10,7 @@ itsdangerous
 Jinja2
 joblib
 MarkupSafe
-numpy==1.21.6
+numpy
 python-dotenv
 redis
 requests
