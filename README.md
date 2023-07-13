@@ -49,9 +49,6 @@ Contributions to the Spotify Music Analyzer project are welcome. If you find any
 
 When contributing, please follow the existing code style, add tests for new functionality, and ensure that your changes do not break existing features.
 
-## License
-The Spotify Music Analyzer is open-source and released under the MIT License. You are free to modify and distribute the application as per the terms of the license.
-
 ## Acknowledgements
 The Spotify Music Analyzer was developed by Sushil Bhandari for personal learning purposes.
 The application utilizes the Spotify API, which provides the necessary data for playlist, artist, and track information.
