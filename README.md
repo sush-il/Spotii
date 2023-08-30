@@ -24,7 +24,7 @@ To access the Spotify Music Analyzer, follow these steps:
 ## Installation
 If you would like a local installation of the project follow these steps:
 
-- Clone the repository: git clone https://github.com/your-username/spotify-music-analyzer.git
+- Clone the repository: git clone https://github.com/sush-il/Spotii.git
 - Navigate to the project directory and create a virtual environment: python3 -m venv venv
 - Activate the virtual environment
 - Install the required dependencies: pip install -r requirements.txt
