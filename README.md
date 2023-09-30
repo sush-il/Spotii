@@ -57,4 +57,5 @@ Please credit and acknowledge the original authors and data sources when reusing
 
 
 ###### Issue: Performance optimization for the website
+
 I wanted to bring to your attention that I've noticed some room for improvement in terms of website performance. While the website is fully functional, I believe there are opportunities to enhance its speed and responsiveness.
