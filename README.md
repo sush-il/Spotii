@@ -60,7 +60,7 @@ Please credit and acknowledge the original authors and data sources when reusing
 
 I wanted to bring to your attention that I've noticed some room for improvement in terms of website performance. While the website is fully functional, I believe there are opportunities to enhance its speed and responsiveness.
 
-![image](https://github.com/sush-il/Spotii/assets/34659821/41bf65b8-f17c-41d5-86d8-aeeffe470baa)
-![image](https://github.com/sush-il/Spotii/assets/34659821/f6c9d771-a5ea-435b-a931-019e316d1fe5)
-![image](https://github.com/sush-il/Spotii/assets/34659821/9c516617-be21-4242-864c-5a6e2cdff04b)
-![image](https://github.com/sush-il/Spotii/assets/34659821/8f92ae8e-8968-4ac9-98e9-431c025c4279)
+<img src = "https://github.com/sush-il/Spotii/assets/34659821/41bf65b8-f17c-41d5-86d8-aeeffe470baa)" width = 500 />
+<img src = "https://github.com/sush-il/Spotii/assets/34659821/f6c9d771-a5ea-435b-a931-019e316d1fe5)" width = 500 />
+<img src = "https://github.com/sush-il/Spotii/assets/34659821/9c516617-be21-4242-864c-5a6e2cdff04b)" width = 500 />
+<img src = "https://github.com/sush-il/Spotii/assets/34659821/8f92ae8e-8968-4ac9-98e9-431c025c4279)" width = 500 />
