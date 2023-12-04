@@ -13,14 +13,6 @@ Spotii is a Flask Spotify Music Analyzer application that integrates with the Sp
 
 **Mood Analysis**: The application employs a machine learning algorithm, specifically Random Forest, to classify the mood of currently playing music. This classification is based on pre-collected data from Spotify playlists that have been labeled as happy, sad, calm, or energetic.
 
-## Usage
-To access the Spotify Music Analyzer, follow these steps:
-
-- Visit the deployed application's URL https://spotii.onrender.com.
-- You will be prompted to log in with your Spotify account.
-- Once logged in, you will have access to your playlists, top artists, and top tracks.
-- To analyze the mood of the currently playing music, navigate to the Mood Analysis section and follow the instructions provided.
-
 ## Installation
 If you would like a local installation of the project follow these steps:
 
