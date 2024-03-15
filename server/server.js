@@ -1,11 +1,12 @@
 const express = require('express')
 const querystring = require('querystring');
+require('dotenv').config({ path: './.env.local' })
+
 const app = express()
 
+clientId = process.env.CLIENT_ID;
+clientSecret = process.env.CLIENT_SECRET;
 
-
-clientId = "83cc05d765584a0a8806c0911f7343b7"
-clientSecret = "8b2c0ea3808347f28d85044611d1fe29"
 
 redirect_uri = "http://127.0.0.1:5000/"
 scope = "user-library-read user-top-read playlist-read-private playlist-read-collaborative user-read-recently-played"
