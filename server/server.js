@@ -1,17 +1,14 @@
 const express = require('express')
-const querystring = require('querystring');
 const request = require('request');
+const querystring = require('querystring');
 require('dotenv').config({ path: './.env.local' })
 
 const app = express()
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
-
-redirect_uri = "http://127.0.0.1:5000/callback"
-//redirect_uri_callback = "http://127.0.0.1:5000/callback/"
-
-scope = "user-library-read user-top-read playlist-read-private playlist-read-collaborative user-read-recently-played"
+const redirect_uri = "http://127.0.0.1:5000/"
+const scope = "user-library-read user-top-read playlist-read-private playlist-read-collaborative user-read-recently-played"
 
 app.get("/login", (req, res) => {
     res.redirect("https://accounts.spotify.com/authorize?" +  querystring.stringify({
@@ -24,7 +21,7 @@ app.get("/login", (req, res) => {
     )
 })
 
-app.get('/callback', function(req, res) {
+app.get('/', function(req, res) {
     const authCode = req.query.code || null;
 
     const form = {
@@ -47,18 +44,28 @@ app.get('/callback', function(req, res) {
     };
 
     // Make a POST request to exchange authorization code for access token
-    request.post(authOptions, function(error, response, body) {
+    request.post(authOptions, async function(error, response, body) {
         if (!error && response.statusCode === 200) {
-            const access_token = body.access_token;
-            const refresh_token = body.refresh_token; // Corrected typo
-
-            res.send("Your access token is: " + access_token);
+            const accessToken = body.access_token;
+            const refresh_token = body.refresh_token;
+            //const getUserPlaylists = await getProfile(accessToken);
+            
         } else {
             res.send("Error when fetching access token");
         }
     });
 });
 
+async function getUserPlaylists(accessToken) {
+    const response = await fetch('https://api.spotify.com/v1/me/playlists', {
+      headers: {
+        Authorization: 'Bearer ' + accessToken
+      }
+    });
   
-
+    const data = await response.json();
+    console.log(data.items)
+    return data;
+  }
+  
 app.listen(5000, () => {console.log("server started on port 5000")})
