@@ -1,13 +1,17 @@
 const express = require('express')
+const cors = require('cors')
 const request = require('request');
 const querystring = require('querystring');
 require('dotenv').config({ path: './.env.local' })
 
 const app = express()
+app.use(cors())
+app.use(express.json())
+
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
-const redirect_uri = "http://127.0.0.1:5000/"
+const redirect_uri = "http://127.0.0.1:3000/"
 const scope = "user-library-read user-top-read playlist-read-private playlist-read-collaborative user-read-recently-played"
 
 app.get("/login", (req, res) => {
@@ -21,9 +25,10 @@ app.get("/login", (req, res) => {
     )
 })
 
+let accessToken;
+
 app.get('/', function(req, res) {
     const authCode = req.query.code || null;
-
     const form = {
         grant_type: 'authorization_code',
         code: authCode,
@@ -42,21 +47,37 @@ app.get('/', function(req, res) {
         form: querystring.stringify(form), // Make sure to stringify the form data
         json: true
     };
-
+    
     // Make a POST request to exchange authorization code for access token
     request.post(authOptions, async function(error, response, body) {
         if (!error && response.statusCode === 200) {
-            const accessToken = body.access_token;
+            accessToken = body.access_token;
             const refresh_token = body.refresh_token;
-            //const getUserPlaylists = await getProfile(accessToken);
+            const expires = body.expires_in;
+
+            res.json(accessToken);
             
         } else {
-            res.send("Error when fetching access token");
+            res.json("Error when fetching access tokens");
         }
     });
 });
 
-async function getUserPlaylists(accessToken) {
+app.get("/getPlaylistData", async (req, res) => {
+    try {
+        const accessToken = req.query.code || null;
+        const userPlaylists = await getUserPlaylists(accessToken);
+      
+        res.json(userPlaylists);
+
+    } catch (error) {
+      console.error("Error fetching playlist data:", error);
+    }
+  });
+
+
+
+const getUserPlaylists = async (accessToken) => {
     const response = await fetch('https://api.spotify.com/v1/me/playlists', {
       headers: {
         Authorization: 'Bearer ' + accessToken
@@ -64,8 +85,60 @@ async function getUserPlaylists(accessToken) {
     });
   
     const data = await response.json();
-    console.log(data.items)
-    return data;
+    const requiredData = data.items.map((playlist) => ({
+        id: playlist.id,
+        playlistLink: playlist.href,
+        name: playlist.name,
+        coverImage: playlist.images[0].url,
+        totalTracks: playlist.tracks.total,
+    }))
+
+    //const playlistTracks = await getTracksFromPlaylist(accessToken, requiredData[1].playlistLink);
+
+    return requiredData;
+  }
+
+const getTracksFromPlaylist = async (accessToken, playlistLink) =>  {
+    const response = await fetch(playlistLink, {
+        headers: {
+            Authorization: 'Bearer ' + accessToken
+        }
+    })
+
+    const allTracks = await response.json();
+
+    const requiredData = allTracks.tracks.items.map((item)=>({
+        id: item.track.id,
+        name: item.track.name,
+        popularity: item.track.popularity,
+        coverImage: item.track.album.images[0].url,
+        artist: item.track.artists[0].name
+    }))
+
+    return requiredData;
+  }
+
+const getAudioFeatures = async (songId) => {
+    const response = await fetch(`https://api.spotify.com/v1/audio-features/${songId}`, {
+        headers: {
+            Authorization: 'Bearer ' + accessToken
+        }
+    })
+
+    const features = await response.json()
+
+    const requiredFeatures = {
+        "danceability": features.danceability,
+        "energy": features.energy,
+        "loudness": features.loudness,
+        "speechiness": features.speechiness,
+        "acousticness": features.acousticness,
+        "instrumentalness": features.instrumentalness,
+        "liveness": features.liveness,
+        "valence": features.valence,
+    }
+
+    return requiredFeatures;
   }
   
 app.listen(5000, () => {console.log("server started on port 5000")})
