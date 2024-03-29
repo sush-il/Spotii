@@ -25,8 +25,6 @@ app.get("/login", (req, res) => {
     )
 })
 
-let accessToken;
-
 app.get('/', function(req, res) {
     const authCode = req.query.code || null;
     const form = {
@@ -75,8 +73,6 @@ app.get("/getPlaylistData", async (req, res) => {
     }
   });
 
-
-
 const getUserPlaylists = async (accessToken) => {
     const response = await fetch('https://api.spotify.com/v1/me/playlists', {
       headers: {
@@ -92,8 +88,6 @@ const getUserPlaylists = async (accessToken) => {
         coverImage: playlist.images[0].url,
         totalTracks: playlist.tracks.total,
     }))
-
-    //const playlistTracks = await getTracksFromPlaylist(accessToken, requiredData[1].playlistLink);
 
     return requiredData;
   }
@@ -140,5 +134,56 @@ const getAudioFeatures = async (songId) => {
 
     return requiredFeatures;
   }
+
+app.get("/getTopArtists", async (req,res) => {
+    try{
+        const accessToken = req.query.code || null;
+        const response = await fetch("https://api.spotify.com/v1/me/top/artists", {
+            headers:{
+                Authorization:  'Bearer ' + accessToken
+            }
+        });
+    
+        const data = await response.json();
+        const requiredData = data.items.map((item) => ({
+            id: item.id,
+            name: item.name,
+            coverImage: item.images[0].url,
+            genres: item.genres,
+            popularity: item.popularity
+        }))
+
+        return res.json(requiredData);
+
+    }catch(error){
+        console.log("Couldn't get top artists");
+    }
+}) 
+
+app.get("/getTopTracks", async (req,res) => {
+    try {
+        const accessToken = req.query.code || null ;
+
+        const response = await fetch("https://api.spotify.com/v1/me/top/tracks", {
+            headers:{
+                Authorization:  'Bearer ' + accessToken
+            }
+        });
+
+        const data = await response.json();
+
+        
+        const requiredData = data.items.map((item) => ({
+            id: item.album.id,
+            name: item.album.name,
+            coverImage: item.album.images[0].url,
+        }))
+
+        return res.json(requiredData);
+
+    } catch (error) {
+        console.log("Couldn't get top tracks");
+    }
+})
   
 app.listen(5000, () => {console.log("server started on port 5000")})

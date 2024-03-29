@@ -1,21 +1,22 @@
 interface nameCardProp {
     id: string,
-    playlistLink: string,
     name: string,
     coverImage: string,
-    totalTracks: number
+    playlistLink?: string,
+    totalTracks?: number,
+    genres? : string[],
+    popularity? : number
 }
 
 const NameCard:React.FC<{data: nameCardProp[]}> = ({data}) => {
     return(
         <div className="row" style = {{
-            width:"100%",
             display: "flex",
             flexDirection: "row",
+            justifyContent: "center",
             flexWrap: "wrap",
-            justifyContent: "center"
+            width:"100%"
         }}>
-        <form action="\details" method="post" style={{width:"100%"}}>
                 {
                     data.slice(0,6).map((singleData:nameCardProp) => (
                         <div className="four columns playcard" style={{
@@ -47,9 +48,7 @@ const NameCard:React.FC<{data: nameCardProp[]}> = ({data}) => {
                         </div>
                     ))
                 }
-        </form>
-
-    </div> 
+        </div> 
     )
 }
 
