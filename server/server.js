@@ -113,6 +113,7 @@ app.get("/getTracksFromPlaylist", async (req,res) =>  {
 
 app.get("/getTrackFeatures", async(req,res) => {
 
+    const accessToken = req.query.accessToken || null;
     const songId = req.query.songId || null;
 
     const response = await fetch(`https://api.spotify.com/v1/audio-features/${songId}`, {
@@ -134,11 +135,9 @@ app.get("/getTrackFeatures", async(req,res) => {
         "valence": features.valence,
     }
 
-    return requiredFeatures;
+    return res.json(requiredFeatures);
 
 })
-
-
 
 app.get("/getTopArtists", async (req,res) => {
     try{

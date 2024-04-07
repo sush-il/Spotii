@@ -6,17 +6,7 @@ import Section from './components/section';
 import DisplayAll from './components/displayAll';
 import Login from './components/login';
 import DetailsPage from './components/details';
-
-interface itemProp{
-  id: string,
-  playlistLink: string,
-  name: string,
-  coverImage: string,
-  totalTracks?: number, 
-  popularity?: number,
-  genres?: string[]
-
-}
+import { itemProp } from './utils/dataProps';
 
 function App() {
   const [playlistData, setPlaylistData] = useState<itemProp [] >([]);
@@ -38,6 +28,7 @@ function App() {
       if (response.ok) {  
         const accessToken = await response.json();
         setAccessToken(accessToken);
+        sessionStorage.setItem('accessToken', accessToken);
         const [playlistResponse, topArtistsResponse, topTracksResponse] = await Promise.all([
           fetch(`http://localhost:5000/getPlaylistData/?code=${accessToken}`),
           fetch(`http://localhost:5000/getTopArtists/?code=${accessToken}&timeframe=medium_term`),
@@ -56,8 +47,7 @@ function App() {
       }else{
         console.log("Response not OK");
       }
-    
-    } catch (e) {
+    } catch (error) {
       console.log("Error when fetching the data");
   };
   };
@@ -93,7 +83,7 @@ function App() {
         <Route path="/playlists" element={<DisplayAll accessToken = {myaccessToken} title='All Your Playlists' data={playlistData} />} />
         <Route path="/artists" element={<DisplayAll accessToken = {myaccessToken} title='All Your Top Artists' data={topArtistsData} />} />
         <Route path="/tracks" element={<DisplayAll accessToken = {myaccessToken} title='All Your Top Tracks' data={topTracksData}/>} />
-        <Route path="/details" element={<DetailsPage accessToken = {myaccessToken} />} />
+        <Route path="/details" element={<DetailsPage accessToken={myaccessToken} />} />
 
       </Routes>
     </div>
