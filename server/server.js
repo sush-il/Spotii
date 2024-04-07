@@ -8,11 +8,10 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const redirect_uri = "http://127.0.0.1:3000/"
-const scope = "user-library-read user-top-read playlist-read-private playlist-read-collaborative user-read-recently-played"
+const scope = "user-library-read user-top-read playlist-read-private playlist-read-collaborative  user-read-recently-played"
 
 app.get("/login", (req, res) => {
     res.redirect("https://accounts.spotify.com/authorize?" +  querystring.stringify({
@@ -49,7 +48,7 @@ app.get('/', function(req, res) {
     // Make a POST request to exchange authorization code for access token
     request.post(authOptions, async function(error, response, body) {
         if (!error && response.statusCode === 200) {
-            accessToken = body.access_token;
+            const accessToken = body.access_token;
             const refresh_token = body.refresh_token;
             const expires = body.expires_in;
 
@@ -64,55 +63,58 @@ app.get('/', function(req, res) {
 app.get("/getPlaylistData", async (req, res) => {
     try {
         const accessToken = req.query.code || null;
-        const userPlaylists = await getUserPlaylists(accessToken);
+        const response = await fetch('https://api.spotify.com/v1/me/playlists', {
+            headers: {
+              Authorization: 'Bearer ' + accessToken
+            }
+          });
+        
+          const data = await response.json();
+          
+          const requiredData = data.items.map((playlist) => ({
+              id: playlist.id,
+              playlistLink: playlist.href,
+              name: playlist.name,
+              coverImage: playlist.images[0].url,
+              totalTracks: playlist.tracks.total,
+          }))
       
-        res.json(userPlaylists);
+          return res.json(requiredData);
 
     } catch (error) {
       console.error("Error fetching playlist data:", error);
     }
   });
 
-const getUserPlaylists = async (accessToken) => {
-    const response = await fetch('https://api.spotify.com/v1/me/playlists', {
-      headers: {
-        Authorization: 'Bearer ' + accessToken
-      }
-    });
-  
-    const data = await response.json();
-    const requiredData = data.items.map((playlist) => ({
-        id: playlist.id,
-        playlistLink: playlist.href,
-        name: playlist.name,
-        coverImage: playlist.images[0].url,
-        totalTracks: playlist.tracks.total,
-    }))
 
-    return requiredData;
-  }
+app.get("/getTracksFromPlaylist", async (req,res) =>  {
+    
+    const accessToken = req.query.accessToken || null;
+    const playlistLink = req.query.playlistLink || null;
 
-const getTracksFromPlaylist = async (accessToken, playlistLink) =>  {
+    
     const response = await fetch(playlistLink, {
         headers: {
             Authorization: 'Bearer ' + accessToken
         }
     })
-
+    
     const allTracks = await response.json();
 
     const requiredData = allTracks.tracks.items.map((item)=>({
         id: item.track.id,
         name: item.track.name,
         popularity: item.track.popularity,
-        coverImage: item.track.album.images[0].url,
+        coverImage: item.track.album.images[0] != undefined ? item.track.album.images[0].url: "",
         artist: item.track.artists[0].name
     }))
+    return res.json(requiredData);
+  })
 
-    return requiredData;
-  }
+app.get("/getTrackFeatures", async(req,res) => {
 
-const getAudioFeatures = async (songId) => {
+    const songId = req.query.songId || null;
+
     const response = await fetch(`https://api.spotify.com/v1/audio-features/${songId}`, {
         headers: {
             Authorization: 'Bearer ' + accessToken
@@ -133,14 +135,18 @@ const getAudioFeatures = async (songId) => {
     }
 
     return requiredFeatures;
-  }
+
+})
+
+
 
 app.get("/getTopArtists", async (req,res) => {
     try{
         const accessToken = req.query.code || null;
-        const response = await fetch("https://api.spotify.com/v1/me/top/artists", {
+        const timeRange = req.query.timeframe || null;
+        const response = await fetch(`https://api.spotify.com/v1/me/top/artists?time_range=${timeRange}`, {
             headers:{
-                Authorization:  'Bearer ' + accessToken
+                Authorization:  'Bearer ' + accessToken,
             }
         });
     
@@ -163,19 +169,19 @@ app.get("/getTopArtists", async (req,res) => {
 app.get("/getTopTracks", async (req,res) => {
     try {
         const accessToken = req.query.code || null ;
-
-        const response = await fetch("https://api.spotify.com/v1/me/top/tracks", {
+        const timeRange = req.query.timeframe || null;
+        const response = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}`, {
             headers:{
-                Authorization:  'Bearer ' + accessToken
-            }
+                Authorization:  'Bearer ' + accessToken,
+            },
         });
 
         const data = await response.json();
 
         
         const requiredData = data.items.map((item) => ({
-            id: item.album.id,
-            name: item.album.name,
+            id: item.id,
+            name: item.name,
             coverImage: item.album.images[0].url,
         }))
 
