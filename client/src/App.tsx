@@ -1,23 +1,14 @@
 import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { Route, Routes } from 'react-router-dom';
+import { itemProp } from './utils/dataProps';
 import Navbar from './components/navbar';
 import NameCard from './components/nameCard';
 import Section from './components/section';
 import DisplayAll from './components/displayAll';
 import Login from './components/login';
 import DetailsPage from './components/details';
-import { itemProp } from './utils/dataProps';
-import DisplayAll from './components/displayAll';
-import Login from './components/login';
-import DetailsPage from './components/details';
-import { itemProp } from './utils/dataProps';
 
 function App() {
-  const [playlistData, setPlaylistData] = useState<itemProp [] >([]);
-  const [topArtistsData, setTopArtistsData] = useState<itemProp []>([]);
-  const [topTracksData, setTopTracksData] = useState<itemProp []>([]);
-  const [myaccessToken, setAccessToken] = useState("")
   const [playlistData, setPlaylistData] = useState<itemProp [] >([]);
   const [topArtistsData, setTopArtistsData] = useState<itemProp []>([]);
   const [topTracksData, setTopTracksData] = useState<itemProp []>([]);
