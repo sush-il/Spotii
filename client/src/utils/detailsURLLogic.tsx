@@ -1,14 +1,6 @@
-interface nameCardProp {
-    id: string,
-    name: string,
-    coverImage: string,
-    playlistLink?: string,
-    totalTracks?: number,
-    genres? : string[],
-    popularity? : number
-}
+import { itemProp } from "./dataProps";
 
-const createURL = (singleData:nameCardProp) => {
+const createURL = (singleData:itemProp) => {
     let urlToDirect;
     if(singleData.playlistLink != null){
         urlToDirect = `/details?itemName=${singleData.name}
@@ -20,8 +12,7 @@ const createURL = (singleData:nameCardProp) => {
 
     }
     else {
-        urlToDirect = `/details?itemName=${singleData.name}
-        &imageLink=${singleData.coverImage}&type=track&id=${singleData.id}`}
+        urlToDirect = `/details?itemName=${singleData.name}&imageLink=${singleData.coverImage}&type=track&id=${singleData.id}&preview=${singleData.preview}`}
 
     return urlToDirect;
 }

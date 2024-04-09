@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import createURL from "../utils/detailsURLLogic";
 import { itemProp } from '../utils/dataProps';
+import createURL from "../utils/detailsURLLogic";
 
 const NameCard:React.FC<{data: itemProp[]}> = ({data}) => {
     return (

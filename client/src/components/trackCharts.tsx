@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
 import 'chart.js';
+import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { trackFeatures } from '../utils/dataProps';
 import {  Chart as ChartJS,CategoryScale,LinearScale,BarElement,Title, Legend, Tooltip} from 'chart.js';

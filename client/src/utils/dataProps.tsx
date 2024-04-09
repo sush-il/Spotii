@@ -1,11 +1,12 @@
 export interface itemProp{
     id: string,
-    playlistLink: string,
     name: string,
     coverImage: string,
+    playlistLink?: string,
     totalTracks?: number, 
     popularity?: number,
     genres?: string[]
+    preview?: string
 }
 
 export interface trackFeatures {

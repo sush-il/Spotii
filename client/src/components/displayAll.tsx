@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import createURL from '../utils/detailsURLLogic';
 import { itemProp } from '../utils/dataProps';
 
-const DisplayAll: React.FC<{accessToken:string; title: string; data: itemProp[]}> = ({accessToken, title, data }) => {
+const DisplayAll: React.FC<{title: string; data: itemProp[]}> = ({title, data }) => {
   const url = new URL(window.location.href).pathname;
   const dataTypeToGet = url==="/artists" ? "getTopArtists" : "getTopTracks"
   const [dataUsed, setDataUsed] = useState<itemProp[]>(data);
@@ -12,14 +12,15 @@ const DisplayAll: React.FC<{accessToken:string; title: string; data: itemProp[]}
   const changeTimeFrame = (range:string) => {
     setTimeFrame(range);
   }
-
+  
   useEffect(()=>{
     if(url !== "/playlists"){
       getData();
     }
   },[timeframe])
-
+  
   const getData = async () => {
+    const accessToken = sessionStorage.getItem("accessToken");
     try{
       const getDatabyTimeFrame = await fetch(`http://localhost:5000/${dataTypeToGet}/?code=${accessToken}&timeframe=${timeframe}`);
       if(getDatabyTimeFrame.ok){

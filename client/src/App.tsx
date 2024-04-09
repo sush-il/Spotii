@@ -28,7 +28,7 @@ function App() {
       if (response.ok) {  
         const accessToken = await response.json();
         setAccessToken(accessToken);
-        sessionStorage.setItem('accessToken', accessToken);
+        sessionStorage.setItem('accessToken', accessToken); // Set the access token to session so it can be accessed
         const [playlistResponse, topArtistsResponse, topTracksResponse] = await Promise.all([
           fetch(`http://localhost:5000/getPlaylistData/?code=${accessToken}`),
           fetch(`http://localhost:5000/getTopArtists/?code=${accessToken}&timeframe=medium_term`),
@@ -80,10 +80,10 @@ function App() {
           </div>
         }/>
 
-        <Route path="/playlists" element={<DisplayAll accessToken = {myaccessToken} title='All Your Playlists' data={playlistData} />} />
-        <Route path="/artists" element={<DisplayAll accessToken = {myaccessToken} title='All Your Top Artists' data={topArtistsData} />} />
-        <Route path="/tracks" element={<DisplayAll accessToken = {myaccessToken} title='All Your Top Tracks' data={topTracksData}/>} />
-        <Route path="/details" element={<DetailsPage accessToken={myaccessToken} />} />
+        <Route path="/playlists" element={<DisplayAll title='All Your Playlists' data={playlistData} />} />
+        <Route path="/artists" element={<DisplayAll title='All Your Top Artists' data={topArtistsData} />} />
+        <Route path="/tracks" element={<DisplayAll title='All Your Top Tracks' data={topTracksData}/>} />
+        <Route path="/details" element={<DetailsPage />} />
 
       </Routes>
     </div>

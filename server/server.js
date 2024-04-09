@@ -142,28 +142,28 @@ app.get("/getTopTracks", async (req,res) => {
     try {
         const accessToken = req.query.code || null ;
         const timeRange = req.query.timeframe || null;
+
         const response = await fetch(`https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}`, {
             headers:{
                 Authorization:  'Bearer ' + accessToken,
             },
         });
 
-        const data = await response.json();
-
-        
-        const requiredData = data.items.map((item) => ({
-            id: item.track.id,
-            name: item.track.name,
-            popularity: item.track.popularity,
-            coverImage: item.track.album.images[0] != undefined ? item.track.album.images[0].url: "",
-            artist: item.track.artists[0].name,
-            preview: item.track.preview_url
-        }))
-
-        return res.json(requiredData);
+        if(response.ok){
+            const data = await response.json();
+            const requiredData = data.items.map((item) => ({
+                id: item.id,
+                name: item.name,
+                coverImage: item.album.images[0] != undefined ? item.album.images[0].url: "",
+                genres: item.genres,
+                preview: item.preview_url
+            }))
+    
+            return res.json(requiredData);
+        }
 
     } catch (error) {
-        console.log("Couldn't get top tracks");
+        console.log("Couldn't get top tracks" + error);
     }
 })
 
