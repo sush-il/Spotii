@@ -44,24 +44,6 @@ const NameCard:React.FC<{data: itemProp[]}> = ({data}) => {
                             }}> {singleData.name} </button>
                         </Link>
                             
-                        
-                        <img alt="cover" style ={{    
-                            width:"7rem",
-                            padding:"1.5% 3% 1.5% 1.5%",
-                            borderRadius: "1.5rem"
-                        }} src={singleData.coverImage}/> 
-
-                        <Link to={urlToDirect}> 
-                            <button style = {{
-                                    border:"none",
-                                    textDecoration: "none",
-                                    color:"white",
-                                    padding:"3%",
-                                    fontFamily: "'Montserrat', sans-serif",
-                                    overflow: "hidden",
-                                    textAlign: "center",
-                            }}> {singleData.name} </button>
-                        </Link>
                             
                         </div>
                     )

@@ -12,7 +12,6 @@ const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const redirect_uri = "http://127.0.0.1:3000/"
 const scope = "user-library-read user-top-read playlist-read-private playlist-read-collaborative  user-read-recently-played"
-const scope = "user-library-read user-top-read playlist-read-private playlist-read-collaborative  user-read-recently-played"
 
 app.get("/login", (req, res) => {
     res.redirect("https://accounts.spotify.com/authorize?" +  querystring.stringify({
@@ -49,7 +48,6 @@ app.get('/', function(req, res) {
     // Make a POST request to exchange authorization code for access token
     request.post(authOptions, async function(error, response, body) {
         if (!error && response.statusCode === 200) {
-            const accessToken = body.access_token;
             const accessToken = body.access_token;
             const refresh_token = body.refresh_token;
             const expires = body.expires_in;
@@ -115,13 +113,7 @@ app.get("/getTracksFromPlaylist", async (req,res) =>  {
   })
 
 app.get("/getTrackFeatures", async(req,res) => {
-    return res.json(requiredData);
-  })
 
-app.get("/getTrackFeatures", async(req,res) => {
-
-    const accessToken = req.query.accessToken || null;
-    const songId = req.query.songId || null;
     const accessToken = req.query.accessToken || null;
     const songId = req.query.songId || null;
 
@@ -182,10 +174,7 @@ app.get("/getTopArtists", async (req,res) => {
         const accessToken = req.query.code || null;
         const timeRange = req.query.timeframe || null;
         const response = await fetch(`https://api.spotify.com/v1/me/top/artists?time_range=${timeRange}`, {
-        const timeRange = req.query.timeframe || null;
-        const response = await fetch(`https://api.spotify.com/v1/me/top/artists?time_range=${timeRange}`, {
             headers:{
-                Authorization:  'Bearer ' + accessToken,
                 Authorization:  'Bearer ' + accessToken,
             }
         });

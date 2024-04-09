@@ -20,18 +20,11 @@ function App() {
       fetchData(authCode);
       window.history.pushState({}, "", "/")
     }
-    const authCode = new URLSearchParams(window.location.search).get('code');
-    if (authCode) {
-      fetchData(authCode);
-      window.history.pushState({}, "", "/")
-    }
   }, []);
 
   const fetchData = async (authCode:string) => {
-  const fetchData = async (authCode:string) => {
     try {
       const response = await fetch(`http://localhost:5000/?code=${authCode}`);
-      if (response.ok) {  
       if (response.ok) {  
         const accessToken = await response.json();
         setAccessToken(accessToken);
@@ -55,10 +48,9 @@ function App() {
         console.log("Response not OK");
       }
     } catch (error) {
-    } catch (error) {
       console.log("Error when fetching the data");
-  };
-  };
+    };
+  }
 
   if(!myaccessToken) return <Login />
   
@@ -78,30 +70,6 @@ function App() {
             flexDirection:"column", 
             marginLeft:"1em",
             flex: 1,
-
-            
-            }}>
-
-  if(!myaccessToken) return <Login />
-  
-  return (
-    <div style={{
-      display: "flex",
-      flexDirection: "row",
-      width:"100vw",
-    }}>
-      
-      <Navbar />
-      <Routes>
-
-        <Route path="/" element={        
-          <div style={{
-            display:"flex", 
-            flexDirection:"column", 
-            marginLeft:"1em",
-            flex: 1,
-
-            
             }}>
 
             <Section title="Your Playlists" dataType = "playlists" items={<NameCard data={playlistData}/>} />
