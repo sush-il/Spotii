@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import Navbar from './components/navbar';
 import NameCard from './components/nameCard';
 import Section from './components/section';
@@ -7,8 +8,16 @@ import DisplayAll from './components/displayAll';
 import Login from './components/login';
 import DetailsPage from './components/details';
 import { itemProp } from './utils/dataProps';
+import DisplayAll from './components/displayAll';
+import Login from './components/login';
+import DetailsPage from './components/details';
+import { itemProp } from './utils/dataProps';
 
 function App() {
+  const [playlistData, setPlaylistData] = useState<itemProp [] >([]);
+  const [topArtistsData, setTopArtistsData] = useState<itemProp []>([]);
+  const [topTracksData, setTopTracksData] = useState<itemProp []>([]);
+  const [myaccessToken, setAccessToken] = useState("")
   const [playlistData, setPlaylistData] = useState<itemProp [] >([]);
   const [topArtistsData, setTopArtistsData] = useState<itemProp []>([]);
   const [topTracksData, setTopTracksData] = useState<itemProp []>([]);
@@ -20,11 +29,18 @@ function App() {
       fetchData(authCode);
       window.history.pushState({}, "", "/")
     }
+    const authCode = new URLSearchParams(window.location.search).get('code');
+    if (authCode) {
+      fetchData(authCode);
+      window.history.pushState({}, "", "/")
+    }
   }, []);
 
   const fetchData = async (authCode:string) => {
+  const fetchData = async (authCode:string) => {
     try {
       const response = await fetch(`http://localhost:5000/?code=${authCode}`);
+      if (response.ok) {  
       if (response.ok) {  
         const accessToken = await response.json();
         setAccessToken(accessToken);
@@ -48,9 +64,32 @@ function App() {
         console.log("Response not OK");
       }
     } catch (error) {
+    } catch (error) {
       console.log("Error when fetching the data");
   };
   };
+
+  if(!myaccessToken) return <Login />
+  
+  return (
+    <div style={{
+      display: "flex",
+      flexDirection: "row",
+      width:"100vw",
+    }}>
+      
+      <Navbar />
+      <Routes>
+
+        <Route path="/" element={        
+          <div style={{
+            display:"flex", 
+            flexDirection:"column", 
+            marginLeft:"1em",
+            flex: 1,
+
+            
+            }}>
 
   if(!myaccessToken) return <Login />
   

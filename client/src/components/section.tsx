@@ -8,6 +8,7 @@ interface SectionProps {
 }
 
 const Section: React.FC<SectionProps> = (props) => {
+    
     return (
             <div className="row" style={{  
                 width: "100%",
