@@ -67,9 +67,6 @@ const NameCard:React.FC<{data: itemProp[]}> = ({data}) => {
                     )
                 })
             }
-                    )
-                })
-            }
         </div> 
     )
 }
