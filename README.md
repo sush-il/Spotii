@@ -27,15 +27,10 @@ If you would like a local installation of the project follow these steps:
     - `npm run dev` (for the server)
 
 ## Technologies Used
-**React**: The library used for front-end development.
-**Express**: Web framework used for building the server and handling HTTP requests.
-**Spotify API**: The Spotify API is utilized to retrieve user-specific data, including playlists, top artists, and top tracks.
-**Chart JS**: A JavaScript library used for data visualization. Chart.js is employed to create interactive and visually appealing graphs representing audio features.
-
-
-##### Issue: Performance optimization for the website
-
-I wanted to bring to your attention that I've noticed some room for improvement in terms of website performance. While the website is fully functional, I believe there are opportunities to enhance its speed and responsiveness.
+**React**: The library used for front-end development. <br />
+**Express**: Web framework used for building the server and handling HTTP requests. <br />
+**Spotify API**: The Spotify API is utilized to retrieve user-specific data, including playlists, top artists, and top tracks. <br />
+**Chart JS**: A JavaScript library used for data visualization. Chart.js is employed to create interactive and visually appealing graphs representing audio features. <br />
 
 <img src="https://github.com/sush-il/Spotii/assets/34659821/f20829e5-69d8-41a5-af1d-7a69f3338d5d" width="500" alt="image">
 <img src="https://github.com/sush-il/Spotii/assets/34659821/fa2587f5-e4e2-45c1-919b-33bb727257dd" width="500" alt="image">
@@ -72,16 +67,21 @@ I wanted to bring to your attention that I've noticed some room for improvement 
 
 <br />
 
+<div style="color:grey;">
+    <h3> Contributing </h3>
+    <p>
+        Contributions to the Spotify Music Analyzer project are welcome. 
+        If you find any bugs, have suggestions for improvements, or would like to add new features, please submit an issue or create a pull request in the repository.
+        When contributing, please follow the existing code style, add tests for new functionality, and ensure that your changes do not break existing features.   
+    </p>
+    <h3> Acknowledgements </h3>
+    <p> 
+        The Spotify Music Analyzer was developed by Sushil Bhandari for personal learning purposes.
+        The application utilizes the Spotify API, which provides the necessary data for playlist, artist, and track information.
+        The mood classification algorithm is based on the Random Forest machine learning algorithm and uses pre-collected data from labeled Spotify playlists.
+        Please credit and acknowledge the original authors and data sources when reusing or referencing the Spotify Music Analyzer project.
+    </p>
+</div>
 
-### Contributing
-Contributions to the Spotify Music Analyzer project are welcome. If you find any bugs, have suggestions for improvements, or would like to add new features, please submit an issue or create a pull request in the repository.
-
-When contributing, please follow the existing code style, add tests for new functionality, and ensure that your changes do not break existing features.
-
-### Acknowledgements
-The Spotify Music Analyzer was developed by Sushil Bhandari for personal learning purposes.
-The application utilizes the Spotify API, which provides the necessary data for playlist, artist, and track information.
-The mood classification algorithm is based on the Random Forest machine learning algorithm and uses pre-collected data from labeled Spotify playlists.
-Please credit and acknowledge the original authors and data sources when reusing or referencing the Spotify Music Analyzer project.
 
 
