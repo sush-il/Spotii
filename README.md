@@ -61,7 +61,7 @@ If you would like a local installation of the project follow these steps:
 ## Problems faced
 <details>
   <summary><strong>Handling access token</strong></summary>
-  - We encountered issues with page re-render in the frontend which meant the access token immediately became inaccessable.
+    I encountered issues with page re-render in the frontend which meant the access token immediately became inaccessable.
     To address this, I decided to remove the authorization code from the URL after the first fetch to prevent re-use of expired code which prevented re-fetch from the server.
 </details>
 
