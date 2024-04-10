@@ -32,17 +32,6 @@ If you would like a local installation of the project follow these steps:
 **Spotify API**: The Spotify API is utilized to retrieve user-specific data, including playlists, top artists, and top tracks.
 **Chart JS**: A JavaScript library used for data visualization. Chart.js is employed to create interactive and visually appealing graphs representing audio features.
 
-## Contributing
-Contributions to the Spotify Music Analyzer project are welcome. If you find any bugs, have suggestions for improvements, or would like to add new features, please submit an issue or create a pull request in the repository.
-
-When contributing, please follow the existing code style, add tests for new functionality, and ensure that your changes do not break existing features.
-
-## Acknowledgements
-The Spotify Music Analyzer was developed by Sushil Bhandari for personal learning purposes.
-The application utilizes the Spotify API, which provides the necessary data for playlist, artist, and track information.
-The mood classification algorithm is based on the Random Forest machine learning algorithm and uses pre-collected data from labeled Spotify playlists.
-Please credit and acknowledge the original authors and data sources when reusing or referencing the Spotify Music Analyzer project.
-
 
 ##### Issue: Performance optimization for the website
 
@@ -54,38 +43,45 @@ I wanted to bring to your attention that I've noticed some room for improvement 
 <img src="https://github.com/sush-il/Spotii/assets/34659821/d780cebc-9c4c-426e-9e7a-1dc5b1e22bb0" width="500" alt="image">
 
 
+## What I learned from this project
+
+<details>
+  <summary><strong>OAuth 2.0 Authentication Processes through Spotify</strong></summary>
+
+  1. **Login Process:**
+     - On entering the homepage redirect users to Spotify authorization page with the provided credentials and scopes.
+     - After authorization, Spotify redirects users back to our application with an authorization code included in the URL.
+
+  2. **Fetching Access Token:**
+     - Our server receives the authorization code and exchanges it for an access token by making a POST request.
+     - The server then retrieves the access token and a refresh token.
+</details>
+
+<details>
+  <summary><strong>Storage Mechanisms</strong></summary>
+    I learned about various storage mechanisms such as localStorage, sessionStorage & cookies. I used sessions to manage access tokens for authentication in my project. 
+    Sessions provide a convenient way to store user authentication state across multiple requests without exposing sensitive information like access tokens directly in URLs or local storage. 
+</details>
+
+## Problems faced
+<details>
+  <summary><strong>Handling access token</strong></summary>
+  - We encountered issues with page re-render in the frontend which meant the access token immediately became inaccessable.
+    To address this, I decided to remove the authorization code from the URL after the first fetch to prevent re-use of expired code which prevented re-fetch from the server.
+</details>
+
+<br />
 
 
+### Contributing
+Contributions to the Spotify Music Analyzer project are welcome. If you find any bugs, have suggestions for improvements, or would like to add new features, please submit an issue or create a pull request in the repository.
+
+When contributing, please follow the existing code style, add tests for new functionality, and ensure that your changes do not break existing features.
+
+### Acknowledgements
+The Spotify Music Analyzer was developed by Sushil Bhandari for personal learning purposes.
+The application utilizes the Spotify API, which provides the necessary data for playlist, artist, and track information.
+The mood classification algorithm is based on the Random Forest machine learning algorithm and uses pre-collected data from labeled Spotify playlists.
+Please credit and acknowledge the original authors and data sources when reusing or referencing the Spotify Music Analyzer project.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-# spoti
-
-###### So far this is what i've learnt
-###### we got to login url which redirects us to spotify authrize page with the given credentials and scope
-###### This returns a code which can be used to get the acess token; code is in the url
-###### we grab the code from the url
-###### set credentials such as form, headers and authOptions; and use this to make a most request 
-###### Once the post request is made we get back the access token and refresh token
-
-
-##### So how i did it is with a button that goes to the calls the server port at /login 
-##### The login redirects user to frontend (different port) with the auth code
-##### The authcode is to receive the access token from the server
-##### The access token is returned to the frontend. While trying to fetch data the access token is passed through the server port url as a param 
-##### We access the access token from the url in the serer and use it get any data; then the data is passed back to the front end to be displayed
-
-#### One of the big problem that i had at one point was the useEffect was doing a re-render automatically; was mounting twice for some reason on the homepage
-#### This meant although all the data would load; the data (access token) we received from the server instantly became unusuable (it held the error, since the code used to get the token expired). 
-#### The only solution i could think of was to actually remove the code from url after the first fetch; since code was now null access token fetch couldn't happen
