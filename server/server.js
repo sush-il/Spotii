@@ -217,9 +217,12 @@ app.get("/getCurrentTrackMood", async (req, res) => {
       }
     );
     const data = await response.json();
+
+    console.log(data);
+
     const requiredData = {
-      id: data.item.album.id,
-      name: data.item.album.name,
+      id: data.item.id,
+      name: data.item.name,
       coverImage: data.item.album.images[0].url,
     };
     return res.json(requiredData);
