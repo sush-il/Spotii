@@ -26,6 +26,7 @@ function App() {
       fetchData(authCode);
       window.history.pushState({}, "", "/");
     }
+    fetchCurrentTrack();
   }, []);
 
   const fetchData = async (authCode: string) => {
@@ -35,28 +36,19 @@ function App() {
         const accessToken = await response.json();
         setAccessToken(accessToken);
         sessionStorage.setItem("accessToken", accessToken); // Set the access token to session so it can be accessed
-        const [
-          playlistResponse,
-          topArtistsResponse,
-          topTracksResponse,
-          moodResponse,
-        ] = await Promise.all([
-          fetch(`http://localhost:5000/getPlaylistData/?code=${accessToken}`),
-          fetch(
-            `http://localhost:5000/getTopArtists/?code=${accessToken}&timeframe=medium_term`
-          ),
-          fetch(
-            `http://localhost:5000/getTopTracks/?code=${accessToken}&timeframe=medium_term`
-          ),
-          fetch(
-            `http://localhost:5000/getCurrentTrackMood/?code=${accessToken}`
-          ),
-        ]);
-
-        if (moodResponse.ok) {
-          const moodResponseData = await moodResponse.json();
-          setMoodData(moodResponseData);
-        }
+        const [playlistResponse, topArtistsResponse, topTracksResponse] =
+          await Promise.all([
+            fetch(`http://localhost:5000/getPlaylistData/?code=${accessToken}`),
+            fetch(
+              `http://localhost:5000/getTopArtists/?code=${accessToken}&timeframe=medium_term`
+            ),
+            fetch(
+              `http://localhost:5000/getTopTracks/?code=${accessToken}&timeframe=medium_term`
+            ),
+            // fetch(
+            //   `http://localhost:5000/getCurrentTrackMood/?code=${accessToken}`
+            // ),
+          ]);
 
         if (playlistResponse.ok && topArtistsResponse.ok) {
           const playlistData = await playlistResponse.json();
@@ -71,6 +63,18 @@ function App() {
       }
     } catch (error) {
       console.log("Error when fetching the data");
+    }
+  };
+
+  const fetchCurrentTrack = async () => {
+    const accessToken = sessionStorage.getItem("accessToken");
+    const moodResponse = await fetch(
+      `http://localhost:5000/getCurrentTrackMood/?code=${accessToken}`
+    );
+
+    if (moodResponse.ok) {
+      const moodResponseData = await moodResponse.json();
+      setMoodData(moodResponseData);
     }
   };
 

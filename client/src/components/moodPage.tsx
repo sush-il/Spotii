@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { itemProp, trackFeatures } from "../utils/dataProps";
+import getSongMood from "../utils/moodLogicML";
 
 const MoodPage: React.FC<{ trackData: itemProp }> = ({ trackData }) => {
   const [trackFeatures, setTrackFeatures] = useState<trackFeatures | null>(
@@ -18,7 +19,6 @@ const MoodPage: React.FC<{ trackData: itemProp }> = ({ trackData }) => {
 
       if (response.ok) {
         const features = await response.json();
-        console.log(features);
         setTrackFeatures(features);
       }
     } catch (error) {
@@ -45,7 +45,9 @@ const MoodPage: React.FC<{ trackData: itemProp }> = ({ trackData }) => {
           paddingTop: "5%",
         }}
       />
-      <h1> {trackFeatures?.danceability} </h1>
+      <h1> {trackData.name} </h1>
+      <h3> Mood of the current Track is: </h3>
+      <h2> {getSongMood(trackFeatures)} </h2>
     </div>
   );
 };
