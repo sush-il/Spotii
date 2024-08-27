@@ -30,6 +30,7 @@ If you would like a local installation of the project follow these steps:
 - Run the client and server
   - `npm start` (for the client)
   - `npm run dev` (for the server)
+  - `py app.py` (for flask server)
 
 ## Technologies Used
 
