@@ -1,6 +1,6 @@
 # Spotii
 
-Spotii is a Spotify Music Analyzer application that integrates with the Spotify API to provide users with information about their playlists, top artists, and top tracks.
+Spotii is a Spotify Music Analyzer application that integrates with the Spotify API to provide users with information about their playlists, top artists, and top tracks. It also uses the Random Forest machine learning algorithm to identify the mood of the currently playing song. 
 
 ## Features
 
