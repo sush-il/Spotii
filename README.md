@@ -37,7 +37,7 @@ If you would like a local installation of the project follow these steps:
 **Express**: Web framework used for building the server and handling HTTP requests. <br />
 **Spotify API**: The Spotify API is utilized to retrieve user-specific data, including playlists, top artists, and top tracks. <br />
 **Chart JS**: A JavaScript library used for data visualization. Chart.js is employed to create interactive and visually appealing graphs representing audio features.
-**Flask**: As a backend for mood classification.
+**Flask**: As a backend for mood classification. <br />
 **Scikit-learn**: Machine Learning framework.
 <br />
 
@@ -45,7 +45,8 @@ If you would like a local installation of the project follow these steps:
 <img src="https://github.com/sush-il/Spotii/assets/34659821/fa2587f5-e4e2-45c1-919b-33bb727257dd" width="500" alt="image">
 <img src="https://github.com/sush-il/Spotii/assets/34659821/f8880524-bffd-4e99-878a-bd59f0669e97" width="500" alt="image">
 <img src="https://github.com/sush-il/Spotii/assets/34659821/d780cebc-9c4c-426e-9e7a-1dc5b1e22bb0" width="500" alt="image">
-<img src="" width="500" alt="mood page">
+<img src="https://github.com/user-attachments/assets/27398367-a06a-4ba9-a57e-95152a842b42"        width="500" alt="mood page">
+
 
 ## What I learned from this project
 
