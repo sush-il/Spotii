@@ -218,8 +218,6 @@ app.get("/getCurrentTrackMood", async (req, res) => {
     );
     const data = await response.json();
 
-    console.log(data);
-
     const requiredData = {
       id: data.item.id,
       name: data.item.name,
