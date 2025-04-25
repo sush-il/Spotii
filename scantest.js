@@ -1,3 +1,4 @@
-# Test AWS key (harmless, for triggering secret scanning only)
-aws_access_key_id = "AKIA1234567890EXAMPLE"
-aws_secret_access_key = wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY
+// test-secrets.js
+const awsKey = "AKIA1234567890EXAMPLE";
+const slackWebhook = "https://hooks.slack.com/services/T00000000/B00000000/XXXXXXXXXXXXXXXXXXXXXXXX";
+const githubToken = "ghp_1234567890abcdefghijklmnopqrstuvwxyzABCD";
