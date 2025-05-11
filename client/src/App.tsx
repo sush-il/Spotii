@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
-import { itemProp } from "./utils/dataProps";
-import Navbar from "./components/navbar";
-import NameCard from "./components/nameCard";
-import Section from "./components/section";
+import DetailsPage from "./components/details";
 import DisplayAll from "./components/displayAll";
 import Login from "./components/login";
-import DetailsPage from "./components/details";
 import MoodPage from "./components/moodPage";
+import NameCard from "./components/nameCard";
+import Navbar from "./components/navbar";
+import Section from "./components/section";
+import { itemProp } from "./utils/dataProps";
 
 function App() {
   const [playlistData, setPlaylistData] = useState<itemProp[]>([]);
