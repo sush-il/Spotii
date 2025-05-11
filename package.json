@@ -15,6 +15,14 @@
     "server"
   ],
   "dependencies": {
-    "concurrently": "^9.1.2"
+    "@eslint/js": "^9.26.0",
+    "concurrently": "^9.1.2",
+    "eslint": "^9.26.0",
+    "eslint-plugin-react": "^7.37.5",
+    "globals": "^16.1.0",
+    "typescript-eslint": "^8.32.0"
+  },
+  "devDependencies": {
+    "prettier": "3.5.3"
   }
 }
