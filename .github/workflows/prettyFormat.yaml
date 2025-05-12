@@ -38,7 +38,7 @@ jobs:
                 git config user.name "github-actions[bot]"
                 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
                 
-                BRANCH_NAME = "auto/prettierConfig/${{ github.head_ref }}"
+                BRANCH_NAME="auto/prettierConfig/${{ github.head_ref }}"
                 git switch -c "$BRANCH_NAME"
 
                 git pull origin "$BRANCH_NAME"
