@@ -44,6 +44,7 @@ jobs:
                 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
                 
                 BRANCH_NAME="auto/prettierConfig/${{ github.head_ref }}"
+                git pull --rebase origin "$BRANCH_NAME"
                 git switch -c "$BRANCH_NAME"
 
                 git add .
