@@ -44,8 +44,8 @@ jobs:
                 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
                 
                 BRANCH_NAME="auto/prettierConfig/${{ github.head_ref }}"
-                git pull --rebase origin "$BRANCH_NAME"
                 git switch -c "$BRANCH_NAME"
+                git pull --rebase origin "$BRANCH_NAME"
 
                 git add .
                 git commit -m "chore: auto format code with prettier"
@@ -53,13 +53,15 @@ jobs:
 
             - name: "Merge formatting to branch"
               if: steps.changes.outputs.noChanges == 'false'
+              env:
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                 BRANCH_NAME="auto/prettierConfig/${{ github.head_ref }}"
                 gh pr create \
-                -- base: ${{ github.head_ref }} \
-                -- head: BRANCH_NAME
-                -- title: "chore: Prettier fixes for ${{ github.head_ref }}"
-                -- body: "This PR contains automated Prettier formatting fixes"
+                -- base ${{ github.head_ref }} \
+                -- head "$BRANCH_NAME"
+                -- title "chore: Prettier fixes for ${{ github.head_ref }}"
+                -- body "This PR contains automated Prettier formatting fixes"
 
 
 
