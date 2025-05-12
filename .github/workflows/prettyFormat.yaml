@@ -57,10 +57,10 @@ jobs:
               run: |
                 BRANCH_NAME="auto/prettierConfig/${{ github.head_ref }}"
                 gh pr create \
-                -- base ${{ github.head_ref }} \
-                -- head "$BRANCH_NAME"
-                -- title "chore: Prettier fixes for ${{ github.head_ref }}"
-                -- body "This PR contains automated Prettier formatting fixes"
+                --base ${{ github.head_ref }} \
+                --head "$BRANCH_NAME"
+                --title "chore: Prettier fixes for ${{ github.head_ref }}"
+                --body "This PR contains automated Prettier formatting fixes"
 
 
 
