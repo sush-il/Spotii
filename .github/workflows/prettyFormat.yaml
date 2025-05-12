@@ -1,0 +1,70 @@
+name: "Format with Prettier"
+on: pull_request
+
+jobs: 
+    prettyFormat:
+        
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            pull-requests: write
+        
+        steps:
+            - name: "Checkout Code"
+              uses: actions/checkout@v4
+              with: 
+                ref: ${{ github.head_ref }}
+
+            - name: "Install Node"
+              uses: actions/setup-node@v4
+              with: 
+                node-version: '20.x'
+
+            - name: "Install PNPM"
+              uses: pnpm/action-setup@v4
+            
+            - name: "Install dependencies"
+              run: "pnpm install"
+
+            - name: "Run Prettier and check for changes"
+              id: "changes"
+              run: | 
+                pnpm exec prettier . --write
+
+                if git diff --quiet; then
+                  echo "changesAvailable=false" >> $GITHUB_OUTPUT
+                else
+                  echo "changesAvailable=true" >> $GITHUB_OUTPUT
+                fi
+
+            - name: "Apply changes"
+              if: steps.changes.outputs.changesAvailable == 'true'
+              run: |
+                git config user.name "github-actions[bot]"
+                git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                
+                BRANCH_NAME="auto/prettierConfig/${{ github.head_ref }}"
+                git switch -c "$BRANCH_NAME"
+
+                git add .
+                git commit -m "chore: auto format code with prettier"
+                git push origin "$BRANCH_NAME"
+
+            - name: "Merge formatting to branch"
+              if: steps.changes.outputs.changesAvailable == 'true'
+              env:
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                BRANCH_NAME="auto/prettierConfig/${{ github.head_ref }}"
+                gh pr create \
+                -- base ${{ github.head_ref }} \
+                -- head "$BRANCH_NAME"
+                -- title "chore: Prettier fixes for ${{ github.head_ref }}"
+                -- body "This PR contains automated Prettier formatting fixes"
+
+
+
+
+
+            
+
