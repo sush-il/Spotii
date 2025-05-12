@@ -19,7 +19,7 @@ Spotii is a Spotify Music Analyzer application that integrates with the Spotify 
 If you would like a local installation of the project follow these steps:
 
 - Clone the repository: git clone https://github.com/sush-il/Spotii.git
-- Navigate to the project directory and run `npm install` on the terminal to install all dependencies
+- Navigate to the project directory and run `pnpm install` on the terminal to install all dependencies
 - Set up your Spotify Developer account and create a new application to obtain client id and client secret.
 - Create a .env file in the project's server directory and add the following information:
 
