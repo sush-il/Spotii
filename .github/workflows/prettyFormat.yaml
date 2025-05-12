@@ -45,6 +45,9 @@ jobs:
                 
                 BRANCH_NAME="auto/prettierConfig/${{ github.head_ref }}"
                 git switch -c "$BRANCH_NAME"
+                git fetch origin
+                git reset --hard origin/${{ github.head_ref }}
+                git push origin "$BRANCH_NAME"
 
                 git add .
                 git commit -m "chore: auto format code with prettier"
