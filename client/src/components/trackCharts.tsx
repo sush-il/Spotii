@@ -1,7 +1,7 @@
-import "chart.js";
-import React, { useEffect, useState } from "react";
-import { Bar } from "react-chartjs-2";
-import { trackFeatures } from "../utils/dataProps";
+import 'chart.js';
+import React, { useEffect, useState } from 'react';
+import { Bar } from 'react-chartjs-2';
+import { trackFeatures } from '../utils/dataProps';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -9,8 +9,8 @@ import {
   BarElement,
   Title,
   Legend,
-  Tooltip,
-} from "chart.js";
+  Tooltip
+} from 'chart.js';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -28,7 +28,7 @@ const ChartComponent: React.FC<{ id: string }> = ({ id }) => {
   }, []);
 
   const getData = async () => {
-    const accessToken = sessionStorage.getItem("accessToken");
+    const accessToken = sessionStorage.getItem('accessToken');
     try {
       const response = await fetch(
         `http://localhost:5000/getTrackFeatures?accessToken=${accessToken}&songId=${id}`
@@ -46,13 +46,13 @@ const ChartComponent: React.FC<{ id: string }> = ({ id }) => {
     <Bar
       data={{
         labels: [
-          "acousticness",
-          "danceability",
-          "energy",
-          "instrumentalness",
-          "liveness",
-          "speechiness",
-          "valence",
+          'acousticness',
+          'danceability',
+          'energy',
+          'instrumentalness',
+          'liveness',
+          'speechiness',
+          'valence'
         ],
         datasets: [
           {
@@ -64,35 +64,35 @@ const ChartComponent: React.FC<{ id: string }> = ({ id }) => {
                   chartData.instrumentalness,
                   chartData.liveness,
                   chartData.speechiness,
-                  chartData.valence,
+                  chartData.valence
                 ]
               : [],
             backgroundColor: [
-              "rgba(0,255,212,0.3)",
-              "rgba(255,0,114,0.3)",
-              "rgba(221,0,255,0.3)",
+              'rgba(0,255,212,0.3)',
+              'rgba(255,0,114,0.3)',
+              'rgba(221,0,255,0.3)'
             ],
-            borderColor: ["rgb(0,255,212)", "rgb(255,0,114)", "rgb(221,0,255)"],
-            borderWidth: 2,
-          },
-        ],
+            borderColor: ['rgb(0,255,212)', 'rgb(255,0,114)', 'rgb(221,0,255)'],
+            borderWidth: 2
+          }
+        ]
       }}
       options={{
-        indexAxis: "y", // horizontal bar
+        indexAxis: 'y', // horizontal bar
         scales: {
           y: {
-            beginAtZero: true,
+            beginAtZero: true
           },
-          x: { display: false },
+          x: { display: false }
         },
 
         plugins: {
           legend: { display: false },
           title: {
             display: true,
-            text: "Audio Features",
-          },
-        },
+            text: 'Audio Features'
+          }
+        }
       }}
     />
   );

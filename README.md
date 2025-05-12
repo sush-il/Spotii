@@ -1,6 +1,6 @@
 # Spotii
 
-Spotii is a Spotify Music Analyzer application that integrates with the Spotify API to provide users with information about their playlists, top artists, and top tracks. It also uses the Random Forest machine learning algorithm to identify the mood of the currently playing song. 
+Spotii is a Spotify Music Analyzer application that integrates with the Spotify API to provide users with information about their playlists, top artists, and top tracks. It also uses the Random Forest machine learning algorithm to identify the mood of the currently playing song.
 
 ## Features
 
@@ -47,7 +47,6 @@ If you would like a local installation of the project follow these steps:
 <img src="https://github.com/sush-il/Spotii/assets/34659821/f8880524-bffd-4e99-878a-bd59f0669e97" width="500" alt="image">
 <img src="https://github.com/sush-il/Spotii/assets/34659821/d780cebc-9c4c-426e-9e7a-1dc5b1e22bb0" width="500" alt="image">
 <img src="https://github.com/user-attachments/assets/27398367-a06a-4ba9-a57e-95152a842b42"        width="500" alt="mood page">
-
 
 ## What I learned from this project
 

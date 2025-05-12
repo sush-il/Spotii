@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { itemProp, trackFeatures } from "../utils/dataProps";
+import { useEffect, useState } from 'react';
+import { itemProp, trackFeatures } from '../utils/dataProps';
 // import getSongMood from "../utils/moodLogicML";
 
 const MoodPage: React.FC<{ trackData: itemProp }> = ({ trackData }) => {
@@ -7,7 +7,7 @@ const MoodPage: React.FC<{ trackData: itemProp }> = ({ trackData }) => {
     null
   );
   const [trackMood, setTrackMood] = useState<{ mood: string; message: string }>(
-    { mood: "", message: "" }
+    { mood: '', message: '' }
   );
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const MoodPage: React.FC<{ trackData: itemProp }> = ({ trackData }) => {
   }, [trackFeatures]); // Only run this when trackFeatures changes
 
   const getTrackFeatures = async () => {
-    const accessToken = sessionStorage.getItem("accessToken");
+    const accessToken = sessionStorage.getItem('accessToken');
     try {
       const response = await fetch(
         `http://localhost:5000/getTrackFeatures?accessToken=${accessToken}&songId=${trackData.id}`
@@ -36,19 +36,19 @@ const MoodPage: React.FC<{ trackData: itemProp }> = ({ trackData }) => {
       }
     } catch (error) {
       console.error(
-        "Error getting features of current playing track: " + error
+        'Error getting features of current playing track: ' + error
       );
     }
   };
 
   const getMood = async () => {
     try {
-      const moodResponse = await fetch("http://127.0.0.1:8000/mood", {
-        method: "POST",
+      const moodResponse = await fetch('http://127.0.0.1:8000/mood', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify(trackFeatures),
+        body: JSON.stringify(trackFeatures)
       });
 
       const data = await moodResponse.json();
@@ -60,40 +60,42 @@ const MoodPage: React.FC<{ trackData: itemProp }> = ({ trackData }) => {
 
   return (
     <div
-      className='container'
+      className="container"
       style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-      }}>
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center'
+      }}
+    >
       <h3>
-        {" "}
+        {' '}
         Mood is: <br />
         <span
           style={{
             backgroundImage: `url("https://media.giphy.com/media/26BROrSHlmyzzHf3i/giphy.gif")`,
-            backgroundSize: "cover",
-            color: "transparent",
-            backgroundClip: "text", // Standard property
-            WebkitBackgroundClip: "text", // Vendor prefix for WebKit browsers
-            MozBackgroundClip: "text", // Vendor prefix for Mozilla browsers
-            textTransform: "uppercase",
-            fontSize: "3em",
-            fontWeight: "900",
-            textAlign: "center",
-          }}>
+            backgroundSize: 'cover',
+            color: 'transparent',
+            backgroundClip: 'text', // Standard property
+            WebkitBackgroundClip: 'text', // Vendor prefix for WebKit browsers
+            MozBackgroundClip: 'text', // Vendor prefix for Mozilla browsers
+            textTransform: 'uppercase',
+            fontSize: '3em',
+            fontWeight: '900',
+            textAlign: 'center'
+          }}
+        >
           {trackMood.mood}
         </span>
         <h6> {trackMood.message} </h6>
       </h3>
       <img
-        alt='Cover'
+        alt="Cover"
         src={trackData.coverImage}
         style={{
-          width: "30rem",
-          borderRadius: "3rem",
-          paddingTop: "5%",
+          width: '30rem',
+          borderRadius: '3rem',
+          paddingTop: '5%'
         }}
       />
       <h1> {trackData.name} </h1>
