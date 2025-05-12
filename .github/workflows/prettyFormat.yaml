@@ -45,6 +45,7 @@ jobs:
                 
                 BRANCH_NAME="auto/prettierConfig/${{ github.head_ref }}"
                 git switch -c "$BRANCH_NAME"
+                git config --global pull.rebase false
                 git pull origin "$BRANCH_NAME"
 
                 git add .
