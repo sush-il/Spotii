@@ -3,7 +3,12 @@ on: pull_request
 
 jobs: 
     prettyFormat:
+        
         runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            pull-requests: write
+        
         steps:
             - name: "Checkout Code"
               uses: actions/checkout@v4
@@ -41,7 +46,6 @@ jobs:
                 BRANCH_NAME="auto/prettierConfig/${{ github.head_ref }}"
                 git switch -c "$BRANCH_NAME"
 
-                git pull origin "$BRANCH_NAME"
                 git add .
                 git commit -m "chore: auto format code with prettier"
                 git push origin "$BRANCH_NAME"
@@ -49,7 +53,7 @@ jobs:
             - name: "Merge formatting to branch"
               if: steps.changes.outputs.noChanges == 'false'
               run: |
-                BRANCH_NAME = "auto/prettierConfig/${{ github.head_ref }}"
+                BRANCH_NAME="auto/prettierConfig/${{ github.head_ref }}"
                 gh pr create \
                 -- base: ${{ github.head_ref }} \
                 -- head: BRANCH_NAME
