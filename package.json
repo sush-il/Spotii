@@ -1,6 +1,7 @@
 {
-  "name": "Spotii",
+  "name": "spotii",
   "version": "1.0.0",
+  "packageManager": "pnpm@9.12.2",
   "description": "",
   "main": "index.js",
   "scripts": {
