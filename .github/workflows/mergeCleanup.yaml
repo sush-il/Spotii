@@ -12,21 +12,25 @@ jobs:
             contents: write
         
         steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
             - name: Delete Branch
               env: 
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               
               run: |
-                
+
                 git config user.name "github-actions[bot]"
                 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-                BRANCH_NAME = ${{ github.event.pull_request.head.ref }}
+                BRANCH_NAME="${{ github.event.pull_request.head.ref }}"
                 if [[ BRANCH_NAME == 'main' || BRANCH_NAME == 'master' ]]; then
                   echo "Skipping deletion of protected branch: $BRANCH_NAME"
                   exit 0
                 fi
-
+                
+                git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}"
                 git push origin --delete "$BRANCH_NAME"
 
                   
