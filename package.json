@@ -1,8 +1,9 @@
 {
-  "name": "Spotii",
+  "name": "spotii",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "packageManager": "pnpm@9.12.2",
   "scripts": {
     "startApp": "concurrently \"pnpm --filter client start\" \"pnpm --filter server start\"",
     "test": "echo \"Error: no test specified\" && exit 1"

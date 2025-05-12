@@ -1,30 +1,30 @@
-import { useEffect, useState } from "react";
-import { Route, Routes } from "react-router-dom";
-import DetailsPage from "./components/details";
-import DisplayAll from "./components/displayAll";
-import Login from "./components/login";
-import MoodPage from "./components/moodPage";
-import NameCard from "./components/nameCard";
-import Navbar from "./components/navbar";
-import Section from "./components/section";
-import { itemProp } from "./utils/dataProps";
+import { useEffect, useState } from 'react';
+import { Route, Routes } from 'react-router-dom';
+import DetailsPage from './components/details';
+import DisplayAll from './components/displayAll';
+import Login from './components/login';
+import MoodPage from './components/moodPage';
+import NameCard from './components/nameCard';
+import Navbar from './components/navbar';
+import Section from './components/section';
+import { itemProp } from './utils/dataProps';
 
 function App() {
   const [playlistData, setPlaylistData] = useState<itemProp[]>([]);
   const [topArtistsData, setTopArtistsData] = useState<itemProp[]>([]);
   const [topTracksData, setTopTracksData] = useState<itemProp[]>([]);
   const [moodData, setMoodData] = useState<itemProp>({
-    id: "",
-    name: "",
-    coverImage: "",
+    id: '',
+    name: '',
+    coverImage: ''
   });
-  const [myaccessToken, setAccessToken] = useState("");
+  const [myaccessToken, setAccessToken] = useState('');
 
   useEffect(() => {
-    const authCode = new URLSearchParams(window.location.search).get("code");
+    const authCode = new URLSearchParams(window.location.search).get('code');
     if (authCode) {
       fetchData(authCode);
-      window.history.pushState({}, "", "/");
+      window.history.pushState({}, '', '/');
     }
     fetchCurrentTrack();
   }, []);
@@ -35,7 +35,7 @@ function App() {
       if (response.ok) {
         const accessToken = await response.json();
         setAccessToken(accessToken);
-        sessionStorage.setItem("accessToken", accessToken); // Set the access token to session so it can be accessed
+        sessionStorage.setItem('accessToken', accessToken); // Set the access token to session so it can be accessed
         const [playlistResponse, topArtistsResponse, topTracksResponse] =
           await Promise.all([
             fetch(`http://localhost:5000/getPlaylistData/?code=${accessToken}`),
@@ -44,7 +44,7 @@ function App() {
             ),
             fetch(
               `http://localhost:5000/getTopTracks/?code=${accessToken}&timeframe=medium_term`
-            ),
+            )
             // fetch(
             //   `http://localhost:5000/getCurrentTrackMood/?code=${accessToken}`
             // ),
@@ -59,15 +59,15 @@ function App() {
           setTopTracksData(topTracks);
         }
       } else {
-        console.log("Response not OK");
+        console.log('Response not OK');
       }
     } catch (error) {
-      console.log("Error when fetching the data");
+      console.log('Error when fetching the data');
     }
   };
 
   const fetchCurrentTrack = async () => {
-    const accessToken = sessionStorage.getItem("accessToken");
+    const accessToken = sessionStorage.getItem('accessToken');
     const moodResponse = await fetch(
       `http://localhost:5000/getCurrentTrackMood/?code=${accessToken}`
     );
@@ -83,60 +83,62 @@ function App() {
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "row",
-        width: "100vw",
-      }}>
+        display: 'flex',
+        flexDirection: 'row',
+        width: '100vw'
+      }}
+    >
       <Navbar />
       <Routes>
         <Route
-          path='/'
+          path="/"
           element={
             <div
               style={{
-                display: "flex",
-                flexDirection: "column",
-                marginLeft: "1em",
-                flex: 1,
-              }}>
+                display: 'flex',
+                flexDirection: 'column',
+                marginLeft: '1em',
+                flex: 1
+              }}
+            >
               <Section
-                title='Your Playlists'
-                dataType='playlists'
+                title="Your Playlists"
+                dataType="playlists"
                 items={<NameCard data={playlistData} />}
               />
               <Section
-                title='Top Artists'
-                dataType='artists'
+                title="Top Artists"
+                dataType="artists"
                 items={<NameCard data={topArtistsData} />}
               />
               <Section
-                title='Top Tracks'
-                dataType='tracks'
+                title="Top Tracks"
+                dataType="tracks"
                 items={<NameCard data={topTracksData} />}
               />
             </div>
           }
         />
         <Route
-          path='/playlists'
+          path="/playlists"
           element={
-            <DisplayAll title='All Your Playlists' data={playlistData} />
+            <DisplayAll title="All Your Playlists" data={playlistData} />
           }
         />
         <Route
-          path='/artists'
+          path="/artists"
           element={
-            <DisplayAll title='All Your Top Artists' data={topArtistsData} />
+            <DisplayAll title="All Your Top Artists" data={topArtistsData} />
           }
         />
         <Route
-          path='/tracks'
+          path="/tracks"
           element={
-            <DisplayAll title='All Your Top Tracks' data={topTracksData} />
+            <DisplayAll title="All Your Top Tracks" data={topTracksData} />
           }
         />
-        <Route path='/details' element={<DetailsPage />} />
-        <Route path='/mood' element={<MoodPage trackData={moodData} />} />
+        <Route path="/details" element={<DetailsPage />} />
+        <Route path="/mood" element={<MoodPage trackData={moodData} />} />
       </Routes>
     </div>
   );
