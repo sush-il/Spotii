@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import PlaylistDetails from './playlistDetails';
-import ArtistDetails from './artistDetails';
-import TrackDetails from './trackDetails';
 import { trackProps } from '../utils/dataProps';
+import ArtistDetails from './artistDetails';
+import PlaylistDetails from './playlistDetails';
+import TrackDetails from './trackDetails';
 
 const DetailsPage = () => {
   const [allTracks, setAllTracks] = useState<trackProps[]>([]);
@@ -13,6 +13,7 @@ const DetailsPage = () => {
   const [dataType, setDataType] = useState('');
   const [previewURL, setPreviewURL] = useState('');
   const accessToken = sessionStorage.getItem('accessToken');
+  const apiBaseUrl = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const itemName =
@@ -48,7 +49,7 @@ const DetailsPage = () => {
   const fetchData = async (itemLink: string) => {
     try {
       const response = await fetch(
-        `http://localhost:5000/getTracksFromPlaylist?accessToken=${accessToken}&playlistLink=${itemLink}`
+        `${apiBaseUrl}/getTracksFromPlaylist?accessToken=${accessToken}&playlistLink=${itemLink}`
       );
       if (response.ok) {
         const data = await response.json();

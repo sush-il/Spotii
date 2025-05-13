@@ -10,7 +10,7 @@ dotenv.config({ path: './.env' })
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
-const redirect_uri = process.env.REDIRECT_URI;
+const redirect_uri = process.env.SERVER_REDIRECT_URI;
 const baseURL = 'https://api.spotify.com/v1'
 
 const scope =

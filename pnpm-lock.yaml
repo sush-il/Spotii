@@ -98,7 +98,7 @@ importers:
         version: 3.3.2
     devDependencies:
       dotenv:
-        specifier: ^16.4.5
+        specifier: ^16.5.0
         version: 16.5.0
       nodemon:
         specifier: ^3.1.0

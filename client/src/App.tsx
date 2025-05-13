@@ -19,6 +19,7 @@ function App() {
     coverImage: ''
   });
   const [myaccessToken, setAccessToken] = useState('');
+  const apiBaseUrl = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const authCode = new URLSearchParams(window.location.search).get('code');
@@ -31,20 +32,20 @@ function App() {
 
   const fetchData = async (authCode: string) => {
     try {
-      const response = await fetch(`http://localhost:5000/?code=${authCode}`);
+      const response = await fetch(`${apiBaseUrl}?code=${authCode}`);
       if (response.ok) {
         const accessToken = await response.json();
         setAccessToken(accessToken);
         sessionStorage.setItem('accessToken', accessToken); // Set the access token to session so it can be accessed
         const [playlistResponse, topArtistsResponse, topTracksResponse] =
           await Promise.all([
-            fetch(`http://localhost:5000/getPlaylistData/?code=${accessToken}`),
+            fetch(`${apiBaseUrl}/getPlaylistData/?code=${accessToken}`),
             fetch(
-              `http://localhost:5000/getTopArtists/?code=${accessToken}&timeframe=medium_term`
+              `${apiBaseUrl}/getTopArtists/?code=${accessToken}&timeframe=medium_term`
             ),
             fetch(
-              `http://localhost:5000/getTopTracks/?code=${accessToken}&timeframe=medium_term`
-            )
+              `${apiBaseUrl}/getTopTracks/?code=${accessToken}&timeframe=medium_term`
+            ),
             // fetch(
             //   `http://localhost:5000/getCurrentTrackMood/?code=${accessToken}`
             // ),
@@ -69,7 +70,7 @@ function App() {
   const fetchCurrentTrack = async () => {
     const accessToken = sessionStorage.getItem('accessToken');
     const moodResponse = await fetch(
-      `http://localhost:5000/getCurrentTrackMood/?code=${accessToken}`
+      `${apiBaseUrl}/getCurrentTrackMood/?code=${accessToken}`
     );
 
     if (moodResponse.ok) {
