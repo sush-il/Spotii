@@ -74,9 +74,7 @@ app.get('/getPlaylistData', async (req, res) => {
     }
 
     const response = await fetch(`${baseURL}/me/playlists`, {
-      headers: {
-        Authorization: 'Bearer ' + accessToken
-      }
+      headers: { Authorization: `Bearer ${ accessToken }`  }
     });
 
     if (!response.ok) {
@@ -106,7 +104,7 @@ app.get('/getTracksFromPlaylist', async (req, res) => {
 
   const response = await fetch(playlistLink, {
     headers: {
-      Authorization: 'Bearer ' + accessToken
+      Authorization: `Bearer ${ accessToken }`
     }
   });
 
@@ -134,11 +132,9 @@ app.get('/getTrackFeatures', async (req, res) => {
   const songId = req.query.songId || null;
 
   const response = await fetch(
-    `https://api.spotify.com/v1/audio-features/${songId}`,
+    `${baseURL}/audio-features/${songId}`,
     {
-      headers: {
-        Authorization: 'Bearer ' + accessToken
-      }
+      headers: { Authorization: `Bearer ${ accessToken }`  }
     }
   );
 
@@ -164,10 +160,10 @@ app.get('/getTopTracks', async (req, res) => {
     const timeRange = req.query.timeframe || null;
 
     const response = await fetch(
-      `https://api.spotify.com/v1/me/top/tracks?time_range=${timeRange}`,
+      `${baseURL}/me/top/tracks?time_range=${timeRange}`,
       {
         headers: {
-          Authorization: 'Bearer ' + accessToken
+          Authorization: `Bearer ${ accessToken }`
         }
       }
     );
@@ -195,10 +191,10 @@ app.get('/getTopArtists', async (req, res) => {
     const accessToken = req.query.code || null;
     const timeRange = req.query.timeframe || null;
     const response = await fetch(
-      `https://api.spotify.com/v1/me/top/artists?time_range=${timeRange}`,
+      `${baseURL}/me/top/artists?time_range=${timeRange}`,
       {
       headers: {
-        Authorization: 'Bearer ' + accessToken,
+        Authorization: `Bearer ${ accessToken }`,
         'Content-Type': 'application/json'
       }
       }
@@ -225,10 +221,10 @@ app.get('/getCurrentTrackMood', async (req, res) => {
   try {
     const accessToken = req.query.code || null;
     const response = await fetch(
-      `https://api.spotify.com/v1/me/player/currently-playing`,
+      `${baseURL}/me/player/currently-playing`,
       {
         headers: {
-          Authorization: 'Bearer ' + accessToken
+          Authorization: `Bearer ${ accessToken }`
         }
       }
     );
