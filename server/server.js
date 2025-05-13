@@ -1,32 +1,34 @@
-const express = require('express');
-const cors = require('cors');
-const request = require('request');
-const querystring = require('querystring');
-require('dotenv').config({ path: './.env.local' });
+import cors from 'cors';
+import dotenv from 'dotenv';
+import express from 'express';
+import fetch from 'node-fetch';
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+dotenv.config({ path: './.env' })
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
-const redirect_uri = 'http://127.0.0.1:3000/';
+const redirect_uri = process.env.REDIRECT_URI;
+const baseURL = 'https://api.spotify.com/v1'
+
 const scope =
   'user-library-read user-top-read playlist-read-private playlist-read-collaborative  user-read-recently-played user-read-currently-playing';
 
 app.get('/login', (req, res) => {
   res.redirect(
     'https://accounts.spotify.com/authorize?' +
-      querystring.stringify({
+      new URLSearchParams({
         response_type: 'code',
         client_id: clientId,
-        redirect_uri: redirect_uri,
-        scope: scope
+        redirect_uri,
+        scope
       })
   );
 });
 
-app.get('/', function (req, res) {
+app.get('/', async function (req, res) {
   const authCode = req.query.code || null;
   const form = {
     grant_type: 'authorization_code',
@@ -36,21 +38,19 @@ app.get('/', function (req, res) {
 
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
-    Authorization:
-      'Basic ' + Buffer.from(clientId + ':' + clientSecret).toString('base64')
+    'Authorization': 'Basic ' + Buffer.from(clientId + ':' + clientSecret).toString('base64')
   };
 
-  const authOptions = {
-    url: 'https://accounts.spotify.com/api/token',
-    method: 'POST', // Use POST method for making the request
-    headers: headers,
-    form: querystring.stringify(form), // Make sure to stringify the form data
-    json: true
-  };
+  try {
+    const response = await fetch('https://accounts.spotify.com/api/token', {
+      method: 'POST',
+      headers: headers,
+      body: new URLSearchParams(form), // mimic form-urlencoded body
+    });
 
-  // Make a POST request to exchange authorization code for access token
-  request.post(authOptions, async function (error, response, body) {
-    if (!error && response.statusCode === 200) {
+    if (response.ok) {
+      const body = await response.json();
+
       const accessToken = body.access_token;
       const refresh_token = body.refresh_token;
       const expires = body.expires_in;
@@ -59,17 +59,30 @@ app.get('/', function (req, res) {
     } else {
       res.json('Error when fetching access tokens');
     }
-  });
+  } catch (error) {
+    console.error('Fetch error:', error);
+    // res.status(500).json('Error when fetching access tokens');
+  }
 });
 
 app.get('/getPlaylistData', async (req, res) => {
   try {
     const accessToken = req.query.code || null;
-    const response = await fetch('https://api.spotify.com/v1/me/playlists', {
+
+    if (!accessToken) {
+      return res.status(400).json({ error: 'Missing access token' });
+    }
+
+    const response = await fetch(`${baseURL}/me/playlists`, {
       headers: {
         Authorization: 'Bearer ' + accessToken
       }
     });
+
+    if (!response.ok) {
+      const err = await response.text();
+      return res.status(response.status).json({ error: 'Failed to fetch playlists', details: err });
+    }
 
     const data = await response.json();
 
@@ -184,12 +197,13 @@ app.get('/getTopArtists', async (req, res) => {
     const response = await fetch(
       `https://api.spotify.com/v1/me/top/artists?time_range=${timeRange}`,
       {
-        headers: {
-          Authorization: 'Bearer ' + accessToken
-        }
+      headers: {
+        Authorization: 'Bearer ' + accessToken,
+        'Content-Type': 'application/json'
+      }
       }
     );
-
+  
     const data = await response.json();
     const requiredData = data.items.map((item) => ({
       id: item.id,
@@ -199,11 +213,13 @@ app.get('/getTopArtists', async (req, res) => {
       popularity: item.popularity
     }));
 
+
     return res.json(requiredData);
   } catch (error) {
     console.log("Couldn't get top artists");
   }
 });
+
 
 app.get('/getCurrentTrackMood', async (req, res) => {
   try {
