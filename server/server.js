@@ -45,7 +45,7 @@ app.get('/', async function (req, res) {
     const response = await fetch('https://accounts.spotify.com/api/token', {
       method: 'POST',
       headers: headers,
-      body: new URLSearchParams(form), // mimic form-urlencoded body
+      body: new URLSearchParams(form) // mimic form-urlencoded body
     });
 
     if (response.ok) {
@@ -131,14 +131,21 @@ app.get('/getTrackFeatures', async (req, res) => {
   const accessToken = req.query.accessToken || null;
   const songId = req.query.songId || null;
 
-  const response = await fetch(
-    `${baseURL}/audio-features/${songId}`,
-    {
-      headers: { Authorization: `Bearer ${ accessToken }`  }
-    }
-  );
+  let response;
 
+  try {
+    response = await fetch(`${baseURL}/audio-features/${songId}`, {
+        headers: { Authorization: `Bearer ${ accessToken }`  }
+      }
+    );
+  } catch (err) {
+    console.log(err);
+    throw(err);
+  }
+
+  console.log('features: ' + JSON.stringify(response))
   const features = await response.json();
+
 
   const requiredFeatures = {
     danceability: features.danceability,
