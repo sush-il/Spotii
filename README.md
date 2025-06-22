@@ -25,7 +25,9 @@ If you would like a local installation of the project follow these steps:
 
   - `CLIENT_ID = ...`
   - `CLIENT_SECRET = ...`
-  - `REDIRECT_URI = ...` (must be same as the one in spotify developers account)
+  - `SERVER_REDIRECT_URI = ...` (must be same as the one in spotify developers account; default localhost 3000)
+- Create a .env file in the project's client directory and add the following information:
+  - `VITE_API_URL = ....` paste your backend url (localhost 5000 by default)
 
 - Run the client and server
   - `npm start` (for the client)
