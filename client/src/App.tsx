@@ -8,6 +8,7 @@ import NameCard from './components/nameCard';
 import Navbar from './components/navbar';
 import Section from './components/section';
 import { itemProp } from './utils/dataProps';
+const apiBaseUrl = import.meta.env.VITE_API_URL;
 
 function App() {
   const [playlistData, setPlaylistData] = useState<itemProp[]>([]);
@@ -19,7 +20,6 @@ function App() {
     coverImage: ''
   });
   const [myaccessToken, setAccessToken] = useState('');
-  const apiBaseUrl = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const authCode = new URLSearchParams(window.location.search).get('code');
@@ -45,7 +45,7 @@ function App() {
             ),
             fetch(
               `${apiBaseUrl}/getTopTracks/?code=${accessToken}&timeframe=medium_term`
-            ),
+            )
             // fetch(
             //   `http://localhost:5000/getCurrentTrackMood/?code=${accessToken}`
             // ),
