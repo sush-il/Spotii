@@ -45,10 +45,7 @@ function App() {
             ),
             fetch(
               `${apiBaseUrl}/getTopTracks/?code=${accessToken}&timeframe=medium_term`
-            ),
-            // fetch(
-            //   `http://localhost:5000/getCurrentTrackMood/?code=${accessToken}`
-            // ),
+            )
           ]);
 
         if (playlistResponse.ok && topArtistsResponse.ok) {
@@ -60,10 +57,10 @@ function App() {
           setTopTracksData(topTracks);
         }
       } else {
-        console.log('Response not OK');
+        console.log('Response not OK while fetching playlist, tracks and artists data.');
       }
-    } catch (error) {
-      console.log('Error when fetching the data');
+    } catch (err) {
+      console.error(`Error when fetching the data with status ${err?.status}. ${err.message}`);
     }
   };
 
