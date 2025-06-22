@@ -3,6 +3,7 @@ import { trackProps } from '../utils/dataProps';
 import ArtistDetails from './artistDetails';
 import PlaylistDetails from './playlistDetails';
 import TrackDetails from './trackDetails';
+const apiBaseUrl = import.meta.env.VITE_API_URL;
 
 const DetailsPage = () => {
   const [allTracks, setAllTracks] = useState<trackProps[]>([]);
@@ -13,7 +14,6 @@ const DetailsPage = () => {
   const [dataType, setDataType] = useState('');
   const [previewURL, setPreviewURL] = useState('');
   const accessToken = sessionStorage.getItem('accessToken');
-  const apiBaseUrl = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const itemName =
