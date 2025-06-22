@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import AudioPreview from './audioPreview';
 import ChartComponent from './trackCharts';
 

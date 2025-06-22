@@ -1,16 +1,16 @@
 import 'chart.js';
+import {
+  BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
+  Title,
+  Tooltip
+} from 'chart.js';
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { trackFeatures } from '../utils/dataProps';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Legend,
-  Tooltip
-} from 'chart.js';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -22,6 +22,7 @@ ChartJS.register(
 
 const ChartComponent: React.FC<{ id: string }> = ({ id }) => {
   const [chartData, setChartData] = useState<trackFeatures | null>(null);
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
 
   useEffect(() => {
     getData();
@@ -31,7 +32,7 @@ const ChartComponent: React.FC<{ id: string }> = ({ id }) => {
     const accessToken = sessionStorage.getItem('accessToken');
     try {
       const response = await fetch(
-        `http://localhost:5000/getTrackFeatures?accessToken=${accessToken}&songId=${id}`
+        `${apiBaseUrl}/getTrackFeatures?accessToken=${accessToken}&songId=${id}`
       );
       if (response.ok) {
         const data = await response.json();

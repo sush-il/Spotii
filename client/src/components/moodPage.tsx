@@ -1,14 +1,10 @@
 import { useEffect, useState } from 'react';
 import { itemProp, trackFeatures } from '../utils/dataProps';
-// import getSongMood from "../utils/moodLogicML";
 
 const MoodPage: React.FC<{ trackData: itemProp }> = ({ trackData }) => {
-  const [trackFeatures, setTrackFeatures] = useState<trackFeatures | null>(
-    null
-  );
-  const [trackMood, setTrackMood] = useState<{ mood: string; message: string }>(
-    { mood: '', message: '' }
-  );
+  const [trackFeatures, setTrackFeatures] = useState<trackFeatures | null>(null);
+  const [trackMood, setTrackMood] = useState<{ mood: string; message: string }>({ mood: '', message: '' });
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,7 +23,7 @@ const MoodPage: React.FC<{ trackData: itemProp }> = ({ trackData }) => {
     const accessToken = sessionStorage.getItem('accessToken');
     try {
       const response = await fetch(
-        `http://localhost:5000/getTrackFeatures?accessToken=${accessToken}&songId=${trackData.id}`
+        `${apiBaseUrl}/getTrackFeatures?accessToken=${accessToken}&songId=${trackData.id}`
       );
 
       if (response.ok) {
@@ -40,7 +36,8 @@ const MoodPage: React.FC<{ trackData: itemProp }> = ({ trackData }) => {
       );
     }
   };
-
+  
+  // ############ Deprecated ############
   const getMood = async () => {
     try {
       const moodResponse = await fetch('http://127.0.0.1:8000/mood', {
@@ -70,7 +67,7 @@ const MoodPage: React.FC<{ trackData: itemProp }> = ({ trackData }) => {
     >
       <h3>
         {' '}
-        Mood is: <br />
+        Currently Playing <br />
         <span
           style={{
             backgroundImage: `url("https://media.giphy.com/media/26BROrSHlmyzzHf3i/giphy.gif")`,
