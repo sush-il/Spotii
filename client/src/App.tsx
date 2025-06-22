@@ -8,7 +8,7 @@ import NameCard from './components/nameCard';
 import Navbar from './components/navbar';
 import Section from './components/section';
 import { itemProp } from './utils/dataProps';
-const apiBaseUrl = import.meta.env.VITE_API_URL
+const apiBaseUrl = import.meta.env.VITE_API_URL;
 
 function App() {
   const [playlistData, setPlaylistData] = useState<itemProp[]>([]);

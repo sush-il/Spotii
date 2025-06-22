@@ -6,12 +6,12 @@ import fetch from 'node-fetch';
 const app = express();
 app.use(cors());
 app.use(express.json());
-dotenv.config({ path: './.env' })
+dotenv.config({ path: './.env' });
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const redirect_uri = process.env.SERVER_REDIRECT_URI;
-const baseURL = 'https://api.spotify.com/v1'
+const baseURL = 'https://api.spotify.com/v1';
 
 const scope =
   'user-library-read user-top-read playlist-read-private playlist-read-collaborative  user-read-recently-played user-read-currently-playing';
@@ -38,7 +38,8 @@ app.get('/', async function (req, res) {
 
   const headers = {
     'Content-Type': 'application/x-www-form-urlencoded',
-    'Authorization': 'Basic ' + Buffer.from(clientId + ':' + clientSecret).toString('base64')
+    Authorization:
+      'Basic ' + Buffer.from(clientId + ':' + clientSecret).toString('base64')
   };
 
   try {
@@ -74,12 +75,14 @@ app.get('/getPlaylistData', async (req, res) => {
     }
 
     const response = await fetch(`${baseURL}/me/playlists`, {
-      headers: { Authorization: `Bearer ${ accessToken }`  }
+      headers: { Authorization: `Bearer ${accessToken}` }
     });
 
     if (!response.ok) {
       const err = await response.text();
-      return res.status(response.status).json({ error: 'Failed to fetch playlists', details: err });
+      return res
+        .status(response.status)
+        .json({ error: 'Failed to fetch playlists', details: err });
     }
 
     const data = await response.json();
@@ -104,7 +107,7 @@ app.get('/getTracksFromPlaylist', async (req, res) => {
 
   const response = await fetch(playlistLink, {
     headers: {
-      Authorization: `Bearer ${ accessToken }`
+      Authorization: `Bearer ${accessToken}`
     }
   });
 
@@ -135,17 +138,15 @@ app.get('/getTrackFeatures', async (req, res) => {
 
   try {
     response = await fetch(`${baseURL}/audio-features/${songId}`, {
-        headers: { Authorization: `Bearer ${ accessToken }`  }
-      }
-    );
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
   } catch (err) {
     console.log(err);
-    throw(err);
+    throw err;
   }
 
-  console.log('features: ' + JSON.stringify(response))
+  console.log('features: ' + JSON.stringify(response));
   const features = await response.json();
-
 
   const requiredFeatures = {
     danceability: features.danceability,
@@ -170,7 +171,7 @@ app.get('/getTopTracks', async (req, res) => {
       `${baseURL}/me/top/tracks?time_range=${timeRange}`,
       {
         headers: {
-          Authorization: `Bearer ${ accessToken }`
+          Authorization: `Bearer ${accessToken}`
         }
       }
     );
@@ -200,13 +201,13 @@ app.get('/getTopArtists', async (req, res) => {
     const response = await fetch(
       `${baseURL}/me/top/artists?time_range=${timeRange}`,
       {
-      headers: {
-        Authorization: `Bearer ${ accessToken }`,
-        'Content-Type': 'application/json'
-      }
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        }
       }
     );
-  
+
     const data = await response.json();
     const requiredData = data.items.map((item) => ({
       id: item.id,
@@ -216,25 +217,20 @@ app.get('/getTopArtists', async (req, res) => {
       popularity: item.popularity
     }));
 
-
     return res.json(requiredData);
   } catch (error) {
     console.log("Couldn't get top artists");
   }
 });
 
-
 app.get('/getCurrentTrackMood', async (req, res) => {
   try {
     const accessToken = req.query.code || null;
-    const response = await fetch(
-      `${baseURL}/me/player/currently-playing`,
-      {
-        headers: {
-          Authorization: `Bearer ${ accessToken }`
-        }
+    const response = await fetch(`${baseURL}/me/player/currently-playing`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
       }
-    );
+    });
     const data = await response.json();
 
     const requiredData = {
